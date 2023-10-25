@@ -1,0 +1,164 @@
+
+body {
+    background: #074D16;
+    margin: 0;
+    padding: 0;
+}
+
+div.EZPark-Container {
+    width: 100%;
+    height: 112px;
+    flex-shrink: 0;
+    border: 1px solid #000; 
+    background: #1C732F;
+    position: relative;
+}
+
+div.EZPark-Container .header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #1C732F;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h1.EZPark {
+    margin-left: 10px;
+    color: #C9E03C;
+    text-align: center;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 50px;
+    padding: 0;
+}
+
+.buttons-container-header {
+    display: flex;
+    align-items: center;
+    margin-right: 50px;
+}
+
+.buttons-container-header button {
+    margin-left: 10px;
+    background: none;
+    border: none;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+    font-size: 30px;
+    text-decoration: none;
+}
+
+.EZPark-Footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 112px;
+    background: #1C732F;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.buttons-container-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.buttons-container-footer button {
+    margin-left: 30px;
+    border-radius: 20px;
+    border: 1px solid #000;
+    background: #C9E03C;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    width: 115px;
+    height: 46px;
+    flex-shrink: 0;
+    text-align: center;
+    text-decoration: none;
+    font-size: larger;
+}
+
+.buttons-container-footer .logout {
+    margin-right: 50px;
+    border-radius: 20px;
+    border: 1px solid #000;
+    background: #C9E03C;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    width: 115px;
+    height: 46px;
+    flex-shrink: 0;
+    text-align: center;
+    text-decoration: none;
+    font-size: larger;
+}
+
+.content-body {
+    padding: 20px;
+}
+
+h1.favorite-parking {
+    color: #C9E03C;
+    position: center;
+    text-align: center;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-bottom: 20px;
+    height: 112px;
+}
+
+.decks-container {
+    width: 300px;
+    border: 1px solid black;
+    overflow: hidden;
+    height: 400px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.decks-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: scroll;
+    height: 400px;
+}
+
+.decks-list::-webkit-scrollbar {
+    width: 0;
+}
+
+.decks-list li {
+    border-bottom: 1px solid black;
+    padding: 8px;
+    height: 33px;
+}
+
+.decks-list button {
+    background: white;
+    border: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
