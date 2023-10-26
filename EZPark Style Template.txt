@@ -1,87 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="<your css sheet>.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Your Title</title>
+</head>
+<body>
+    <div class="ezpark-container">
+        <h1 class="ezpark-container-header">EZPark</h1>
+        <div class="ezpark-container-header-buttons">
+            <button class="settings"><i class="fa fa-gear"></i></button>
+            <button class="profile"><i class="fa fa-user-circle"></i></button>
+        </div>
+    </div>
+    <footer class="ezpark-footer">
+        <div class="ezpark-footer-buttons">
+            <button class="back">Back</button>
+            <button class="logout">Logout</button>
+        </div>
+    </footer>
+</body>
+</html>
+
+-------------------------------------------------------------------------------------
+
+
 body {
     background: #074D16;
+    font-family: Tahoma, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     margin: 0;
-    padding: 0;
 }
 
-div.EZPark-Container {
-    width: 100%;
-    height: 112px;
-    flex-shrink: 0;
-    border: 1px solid #000; 
-    background: #1C732F;
-    position: relative;
-}
-
-div.EZPark-Container .header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #1C732F;
-    color: #fff;
-    margin: 0;
-    padding: 0;
+.ezpark-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-h1.EZPark {
-    margin-left: 10px;
+    padding: 10px;
+    background-color: #1C732F;
     color: #C9E03C;
-    text-align: center;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    font-size: 36px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    margin: 50px;
-    padding: 0;
+    border-radius: 20px;
 }
 
-.buttons-container-header {
+.expark-container-header-buttons {
     display: flex;
-    align-items: center;
-    margin-right: 50px;
 }
 
-.buttons-container-header button {
-    margin-left: 10px;
+.settings {
     background: none;
     border: none;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-    width: 50px;
-    height: 50px;
-    flex-shrink: 0;
     font-size: 30px;
-    text-decoration: none;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
-.EZPark-Footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 112px;
-    background: #1C732F;
-    color: #fff;
+.profile {
+    background: none;
+    border: none;
+    font-size: 30px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.ezpark-footer {
+    background-color: #1C732F;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 10px;
+    padding: 20px;
+    margin-top: auto;
+    margin-bottom: 0;
+    border-radius: 20px;
 }
 
-.buttons-container-footer {
+.ezpark-footer-buttons {
     display: flex;
-    align-items: center;
     justify-content: space-between;
     width: 100%;
 }
 
-.buttons-container-footer button {
-    margin-left: 30px;
+.ezpark-footer-buttons button {
     border-radius: 20px;
     border: 1px solid #000;
     background: #C9E03C;
@@ -92,18 +92,5 @@ h1.EZPark {
     text-align: center;
     text-decoration: none;
     font-size: larger;
-}
-
-.buttons-container-footer .logout {
-    margin-right: 50px;
-    border-radius: 20px;
-    border: 1px solid #000;
-    background: #C9E03C;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    width: 115px;
-    height: 46px;
-    flex-shrink: 0;
-    text-align: center;
-    text-decoration: none;
-    font-size: larger;
+    font-family: Tahoma, sans-serif;
 }
