@@ -4,8 +4,8 @@ body {
     font-family: Tahoma, sans-serif;
     display: flex;
     flex-direction: column;
-    height: 50%;
-    margin: 0px;
+    min-height: 100vh;
+    margin: 0;
 }
 
 .ezpark-container {
@@ -43,7 +43,8 @@ body {
     align-items: center;
     padding: 20px;
     margin-top: auto;
-    border-radius: 10px;
+    margin-bottom: 0;
+    border-radius: 20px;
 }
 
 .ezpark-footer-buttons {
