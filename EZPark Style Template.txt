@@ -33,7 +33,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    margin: 10px;
+    margin: 0;
 }
 
 .ezpark-container {
@@ -71,8 +71,8 @@ body {
     align-items: center;
     padding: 20px;
     margin-top: auto;
-    margin-bottom: 20px;
-    border-radius: 10px;
+    margin-bottom: 0;
+    border-radius: 20px;
 }
 
 .ezpark-footer-buttons {
