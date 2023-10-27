@@ -14,6 +14,10 @@ body {
     padding: 10px;
     background-color: #1C732F;
     color: #C9E03C;
+<<<<<<< HEAD
+=======
+    border-radius: 20px;
+>>>>>>> dc357ed58c4f9236ca43ce16ca2793648f63e280
 }
 
 .expark-container-header-buttons {
@@ -42,6 +46,10 @@ body {
     padding: 20px;
     margin-top: auto;
     margin-bottom: 0;
+<<<<<<< HEAD
+=======
+    border-radius: 20px;
+>>>>>>> dc357ed58c4f9236ca43ce16ca2793648f63e280
 }
 
 .ezpark-footer-buttons {
@@ -62,6 +70,7 @@ body {
     text-decoration: none;
     font-size: larger;
     font-family: Tahoma, sans-serif;
+<<<<<<< HEAD
 }
 .deck-container {
     display: flex;
@@ -145,3 +154,6 @@ body {
 
 
 
+=======
+}
+>>>>>>> dc357ed58c4f9236ca43ce16ca2793648f63e280
