@@ -1,0 +1,16 @@
+<footer class="ezpark-footer">
+    <div class="ezpark-footer-buttons">
+        {% if backDisplay %}
+        <button class="back" onclick="goHome()">Back</button>
+        {% endif %}
+        <button class="logout" onclick="signOut()">Logout</button>
+    </div>
+</footer>
+<script>
+    function signOut() {
+        window.location.href="/login";
+    }
+    function goHome() {
+        window.location.href="/home";
+    }
+</script>
