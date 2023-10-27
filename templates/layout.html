@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Home</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <title>EZPark</title>
 </head>
 <body>
     <div class="ezpark-container">
@@ -19,8 +20,16 @@
     <footer class="ezpark-footer">
         <div class="ezpark-footer-buttons">
             <button class="about">About</button>
-            <button class="logout">Logout</button>
+            <button class="logout" onclick="signOut()">Logout</button>
         </div>
     </footer>
+    <script>
+        function signOut() {
+          var auth2 = gapi.auth2.getAuthInstance();
+          auth2.signOut().then(function () {
+            console.log('User signed out.');
+          });
+        }
+    </script>
 </body>
 </html>
