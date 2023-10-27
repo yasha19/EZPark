@@ -97,6 +97,7 @@ body {
     border: 1px solid black;
     border-radius: 20px;
     margin: 2rem auto;
+    background-color: #1C732F;
 }
 
 .home-btn-container {
@@ -147,7 +148,7 @@ body {
     float: right;
 }
 
-.back:hover, .logout:hover {
+.back:hover,.about:hover, .logout:hover {
     cursor: pointer;
 }
 

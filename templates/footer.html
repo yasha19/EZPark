@@ -3,7 +3,12 @@
         {% if backDisplay %}
         <button class="back" onclick="goHome()">Back</button>
         {% endif %}
+        {% if aboutDisplay %}
+        <button class="about" onclick="goAbout()">About</button>
+        {% endif %}
+        {% if not logDisplay %}
         <button class="logout" onclick="signOut()">Logout</button>
+        {% endif %}
     </div>
 </footer>
 <script>
@@ -12,5 +17,8 @@
     }
     function goHome() {
         window.location.href="/home";
+    }
+    function goAbout() {
+        window.location.href="/about";
     }
 </script>
