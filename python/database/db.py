@@ -18,7 +18,7 @@ class Database:
 
     def insert_new_class(self, student_id: int, building_name: str, day: str, time: str) -> None:
         self.cursor.execute(
-            "INSERT INTO classes (classesID, cProfileID, buildingName, day, time) VALUES (?, ?, ?, ?)", (None, student_id, building_name, day, time))
+            "INSERT INTO classes (classesID, cProfileID, buildingName, day, time) VALUES (?, ?, ?, ?, ?)", (None, student_id, building_name, day, time))
         self.connection.commit()
 
     def get_all_parking_decks(self):
