@@ -56,5 +56,9 @@ def add_favorites_page():
 def alerts_page():
     return render_template('alerts.html', backDisplay=True, aboutDisplay=False)
 
+@app.route('/feedback')
+def feedback_page():
+    return render_template('feedback.html', backDisplay=True, aboutDisplay=False)
+
 if __name__ == '__main__':
     app.run(ssl_context='adhoc', debug=True, host=HOST, port=PORT)
