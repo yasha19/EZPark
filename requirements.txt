@@ -4,4 +4,4 @@ plantuml==0.3.0
 six==1.16.0
 mysql-connector-python==8.2.0
 pyopenssl==23.3.0
-Werkzeug==2.2.2
+Werkzeug==3.0.1
