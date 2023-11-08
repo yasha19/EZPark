@@ -4,20 +4,18 @@ import datetime
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from flask import Flask, render_template, request, make_response, redirect, url_for, session
-from python.utils.session import Sessions
 from python.database.db import Database
 
 app = Flask(__name__)
 app.secret_key = 'uCraR5MZB/AvVo3Q24cBM/fZo5Kv/hV2HW9y0b3puClB25h0lbjBP6vYsHzz1hVY'
 HOST, PORT = 'localhost', 8080
-global userId, profile, favorites, classes, alerts
-profile = None
+global userId, profile, addresses, favorites, classes, alerts, db
 userId = None
-favories = None
+profile = None
+addresses = None
+favorites = None
 classes = None
 alerts = None
-global backDisplay
-backDisplay= True
 db = Database()
 
 @app.route('/')
@@ -36,6 +34,18 @@ def login_page():
         return redirect(url_for('home_page'))
     return render_template('login.html', backDisplay=False, aboutDisplay=False, settingsDisplay=True, logDisplay=True)
     
+@app.route('/logout')
+def logout_page():
+    print("logout_page")
+    global userId, profile, favorites, classes, alerts
+    userId = None
+    profile = None
+    favorites = None
+    classes = None
+    alerts = None
+    session.pop('user_id', None)
+    return redirect(url_for('login_page'))
+    
 @app.route('/about')
 def about_page():
     print("about_page")
@@ -52,44 +62,47 @@ def home_page():
         if profile == None:
             print("Retrieving user profile")
             # profile = db.get_profile_by_id(userId)
-        return render_template('home.html', profile, backDisplay=False, aboutDisplay=True)
+        return render_template('home.html', profileData=profile, backDisplay=False, aboutDisplay=True)
     return redirect(url_for('login_page'))
     
 @app.route('/home', methods=['POST'])
 def home_with_credentials_page():
     print("home_with_credentials_page")
     global userId, profile
-    if isValidSession(userId):
-        return redirect(url_for('home_page'))
-    else:
-        try:
-            token = request.form['g_csrf_token']
-            credential = request.form['credential']
-            decoded_token = id_token.verify_oauth2_token(credential, requests.Request(), '1031925357556-g9tr3am18n1vg8ce88svenjgj82onrvt.apps.googleusercontent.com')
+    
+    try:
+        token = request.form['g_csrf_token']
+        credential = request.form['credential']
+        decoded_token = id_token.verify_oauth2_token(credential, requests.Request(), '1031925357556-g9tr3am18n1vg8ce88svenjgj82onrvt.apps.googleusercontent.com')
 
-            # ID for student account to be used in all other calls
-            userid = decoded_token['sub'] 
-            userId = userid
-            session['user_id'] = userid
-            session['g_csrf_token'] = token
+        # ID for student account to be used in all other calls
+        userid = decoded_token['sub'] 
+        userId = userid
+        session['user_id'] = userid
+        session['g_csrf_token'] = token
 
-            print("Retrieving user profile")
-            # profile = db.get_profile_by_id(userId)
+        print("Retrieving user profile")
+        # profile = db.get_profile_by_id(userId)
 
-            home_page = make_response(redirect(url_for('home_page')))
-            home_page.set_cookie('g_csrf_token', token)
+        home_page = make_response(redirect(url_for('home_page')))
+        home_page.set_cookie('g_csrf_token', token)
 
-            return home_page
-        except ValueError:
-            return redirect(url_for('login_page'))
-    return redirect(url_for('login_page'))
+        return home_page
+    except ValueError:
+        return redirect(url_for('login_page'))
     
 @app.route('/map')
 def map_page():
     print("map_page")
-    global userId
+    global userId, favorites, addresses
     if isValidSession(userId):
-        return render_template('interactive_map.html', backDisplay=True, aboutDisplay=False)
+        # Pull favorites and addresses from database here
+
+        # EXAMPLE
+        # addresses = db.get_all_deck_info()
+        # favorites = db.get_all_favorites_by_user(userId)
+
+        return render_template('interactive_map.html', favData=favorites, mapData=addresses, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
     
 @app.route('/classes')
@@ -97,8 +110,11 @@ def classes_page():
     print("classes_page")
     global userId, classes
     if isValidSession(userId):
-        classes = db.get_all_classes_by_user(userId)
-        return render_template('classes.html', classes, backDisplay=True, aboutDisplay=False)
+        # Pull all the user classes here
+
+        # EXAMPLE
+        # classes = db.get_all_classes_by_user(userId)
+        return render_template('classes.html', classData=classes, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
 @app.route('/add-classes', methods=['GET', 'POST'])
@@ -128,8 +144,12 @@ def favorites_page():
     print("favorites_page")
     global userId, favorites
     if isValidSession(userId):
-        favorites = db.get_all_favorites_by_user(userId)
-        return render_template('favorites.html', favorites, backDisplay=True, aboutDisplay=False)
+        # Pull all the favorites here
+
+        # EXAMPLE
+        # favorites = db.get_all_favorites_by_user(userId)
+
+        return render_template('favorites.html', favData=favorites, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))  
 
 @app.route('/add-favorites', methods=['GET','POST'])
@@ -159,7 +179,7 @@ def alerts_page():
         now = datetime.datetime.now()
         # alerts = db.get_alerts_by_date(now)
 
-        return render_template('alerts.html', alerts, backDisplay=True, aboutDisplay=False)
+        return render_template('alerts.html', alertData=alerts, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page')) 
     
 @app.route('/feedback', methods=['GET','POST'])
@@ -180,10 +200,9 @@ def feedback_page():
     return redirect(url_for('login_page'))    
 
 def isValidSession(user_id):
-    if user_id != None and 'user_id' in session:
-        if session['user_id'] == userId:
-            print("User validated")
-            return True
+    if (user_id != None) and ('user_id' in session) and (session['user_id'] == userId):
+        print("User validated")
+        return True
     return False
 
 if __name__ == '__main__':
