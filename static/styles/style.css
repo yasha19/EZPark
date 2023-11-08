@@ -123,13 +123,9 @@ body {
     text-decoration: underline;
 }
 
-.g_id_signin div, #g_id_onload div {
-    margin: auto;
+#google-signin-btn {
+    margin: 2rem auto;
     display: inline-block;
-}
-
-.g_id_signin, #g_id_onload {
-    margin: 2rem 0;
 }
 
 .login-header-div {

@@ -25,17 +25,17 @@ class Database:
         self.cursor.execute("SELECT * FROM parking")
         return self.cursor.fetchall()
     
-    def get_profile_by_email(self, student_email: str):
-        self.cursor.execute("SELECT * FROM profile where email = ?", (student_email))
+    def get_profile_by_id(self, user_id: str):
+        self.cursor.execute("SELECT * FROM profile where email = ?", (user_id))
         return self.cursor.fetchall()
 
-    def get_all_classes_by_user(self, student_id: int):
-        self.cursor.execute("SELECT * FROM classes WHERE cProfileID= ?", (student_id))
+    def get_all_classes_by_user(self, user_id: int):
+        self.cursor.execute("SELECT * FROM classes WHERE cProfileID= ?", (user_id))
         return self.cursor.fetchall()
 
-    def get_all_favorites_by_user(self, student_id: int):
+    def get_all_favorites_by_user(self, user_id: int):
         self.cursor.execute(
-            "SELECT * FROM favorites WHERE fprofileID = ?", (student_id))
+            "SELECT * FROM favorites WHERE fprofileID = ?", (user_id))
         return self.cursor.fetchall()
 
     def get_alerts_by_date(self, daytime: dt.date):

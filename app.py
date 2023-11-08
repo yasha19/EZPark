@@ -1,64 +1,190 @@
 #!/usr/bin/env python3
 
-from flask import Flask, render_template
+import datetime
+from google.oauth2 import id_token
+from google.auth.transport import requests
+from flask import Flask, render_template, request, make_response, redirect, url_for, session
 from python.utils.session import Sessions
 from python.database.db import Database
 
 app = Flask(__name__)
+app.secret_key = 'uCraR5MZB/AvVo3Q24cBM/fZo5Kv/hV2HW9y0b3puClB25h0lbjBP6vYsHzz1hVY'
 HOST, PORT = 'localhost', 8080
-global username, favorites, classes, alerts
+global userId, profile, favorites, classes, alerts
+profile = None
+userId = None
+favories = None
+classes = None
+alerts = None
 global backDisplay
 backDisplay= True
 db = Database()
-sessions = Sessions()
 
 @app.route('/')
 def index_page():
-    return render_template('login.html', backDisplay=False, aboutDisplay=False, settingsDisplay=True, logDisplay=True)
-
+    print("index_page")
+    global userId
+    if  isValidSession(userId):
+        return redirect(url_for('home_page'))
+    return redirect(url_for('login_page'))
+    
 @app.route('/login')
 def login_page():
-    return render_template('login.html', backDisplay=False, aboutDisplay=False, settingsDisplay=True, logDisplay=True)
-
-@app.route('/logout')
-def logout_page():
+    print("login_page")
+    global userId
+    if isValidSession(userId):
+        return redirect(url_for('home_page'))
     return render_template('login.html', backDisplay=False, aboutDisplay=False, settingsDisplay=True, logDisplay=True)
     
 @app.route('/about')
 def about_page():
-    return render_template('about.html', backDisplay=False, aboutDisplay=False)
+    print("about_page")
+    global userId
+    if isValidSession(userId):
+        return render_template('about.html', backDisplay=True, aboutDisplay=False)
+    return redirect(url_for('login_page'))
 
 @app.route('/home')
 def home_page():
-    return render_template('home.html', backDisplay=False, aboutDisplay=True)
+    print("home_page")
+    global userId, profile
+    if isValidSession(userId):
+        if profile == None:
+            print("Retrieving user profile")
+            # profile = db.get_profile_by_id(userId)
+        return render_template('home.html', profile, backDisplay=False, aboutDisplay=True)
+    return redirect(url_for('login_page'))
+    
+@app.route('/home', methods=['POST'])
+def home_with_credentials_page():
+    print("home_with_credentials_page")
+    global userId, profile
+    if isValidSession(userId):
+        return redirect(url_for('home_page'))
+    else:
+        try:
+            token = request.form['g_csrf_token']
+            credential = request.form['credential']
+            decoded_token = id_token.verify_oauth2_token(credential, requests.Request(), '1031925357556-g9tr3am18n1vg8ce88svenjgj82onrvt.apps.googleusercontent.com')
 
+            # ID for student account to be used in all other calls
+            userid = decoded_token['sub'] 
+            userId = userid
+            session['user_id'] = userid
+            session['g_csrf_token'] = token
+
+            print("Retrieving user profile")
+            # profile = db.get_profile_by_id(userId)
+
+            home_page = make_response(redirect(url_for('home_page')))
+            home_page.set_cookie('g_csrf_token', token)
+
+            return home_page
+        except ValueError:
+            return redirect(url_for('login_page'))
+    return redirect(url_for('login_page'))
+    
 @app.route('/map')
 def map_page():
-    return render_template('interactive_map.html', backDisplay=True, aboutDisplay=False)
-
-@app.route('/add-classes')
+    print("map_page")
+    global userId
+    if isValidSession(userId):
+        return render_template('interactive_map.html', backDisplay=True, aboutDisplay=False)
+    return redirect(url_for('login_page'))
+    
+@app.route('/classes')
 def classes_page():
-    return render_template('add_classes.html', backDisplay=True, aboutDisplay=False)
+    print("classes_page")
+    global userId, classes
+    if isValidSession(userId):
+        classes = db.get_all_classes_by_user(userId)
+        return render_template('classes.html', classes, backDisplay=True, aboutDisplay=False)
+    return redirect(url_for('login_page'))
 
-@app.route('/add-classes', methods=['POST'])
+@app.route('/add-classes', methods=['GET', 'POST'])
 def add_classes_page():
-    return render_template('add_classes.html', backDisplay=True, aboutDisplay=False)
+    print("add_classes_page")
+    global userId
+    if isValidSession(userId):
+        if request.method == 'GET':
+            return render_template('add_classes.html', backDisplay=True, aboutDisplay=False)
+        else:
+            # Put the code for adding a class here
 
-@app.route('/add-favorites')
+            # EXAMPLE
+            # course = request.form['course']
+            # location = request.form['location']
+            # days = request.form['days']
+            # time = request.form['time']
+
+            # populate class object then pass to db function
+            # db.insert_new_class(class)
+
+            return redirect(url_for('classes_page'))
+    return redirect(url_for('login_page'))
+
+@app.route('/favorites')
 def favorites_page():
-    return render_template('add_favorites.html', backDisplay=True, aboutDisplay=False)
+    print("favorites_page")
+    global userId, favorites
+    if isValidSession(userId):
+        favorites = db.get_all_favorites_by_user(userId)
+        return render_template('favorites.html', favorites, backDisplay=True, aboutDisplay=False)
+    return redirect(url_for('login_page'))  
 
-@app.route('/add-favorites', methods=['POST'])
+@app.route('/add-favorites', methods=['GET','POST'])
 def add_favorites_page():
-    return render_template('add_favorites.html', backDisplay=True, aboutDisplay=False)
+    print("add_favorites_page")
+    global userId
+    if isValidSession(userId):
+        if request.method == 'GET':
+            return render_template('add_favorites.html', backDisplay=True, aboutDisplay=False)
+        else:
+            # Put the code for adding a favorite here
 
+            # EXAMPLE
+            # deck = request.form['deck'] Address is already in the database for the deck
+             
+            # populate fav object then pass to db function
+            # db.insert_new_favorite(fav)
+
+            return redirect(url_for('favorites_page'))
+    return redirect(url_for('login_page'))
+    
 @app.route('/alerts')
 def alerts_page():
-    return render_template('alerts.html', backDisplay=True, aboutDisplay=False)
+    print("alerts_page")
+    global userId, alerts
+    if isValidSession(userId):
+        now = datetime.datetime.now()
+        # alerts = db.get_alerts_by_date(now)
 
-@app.route('/feedback')
+        return render_template('alerts.html', alerts, backDisplay=True, aboutDisplay=False)
+    return redirect(url_for('login_page')) 
+    
+@app.route('/feedback', methods=['GET','POST'])
 def feedback_page():
-    return render_template('feedback.html', backDisplay=True, aboutDisplay=False)
+    print("feedback_page")
+    global userId
+    if isValidSession(userId):
+        if request.method == 'GET':
+            return render_template('feedback.html', backDisplay=True, aboutDisplay=False)
+        else:
+            # Put the code for sending a feedback to email here
+
+            # user = request.form['userId']
+            # feedback = request.form['feedback']
+            # send_feedback(user, feedback)
+
+            return render_template('feedback.html', backDisplay=True, aboutDisplay=False)
+    return redirect(url_for('login_page'))    
+
+def isValidSession(user_id):
+    if user_id != None and 'user_id' in session:
+        if session['user_id'] == userId:
+            print("User validated")
+            return True
+    return False
 
 if __name__ == '__main__':
     app.run(ssl_context='adhoc', debug=True, host=HOST, port=PORT)
