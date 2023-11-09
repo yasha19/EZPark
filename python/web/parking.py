@@ -1,60 +1,37 @@
-from scraper import *
+
+from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 
-def scrape_book_titles(driver: webdriver.Chrome, url: str) -> list:
-    """
-    Scrapes the book titles from the books to scrape website.
+def get_parking_availability():
+    print('parking availability')
 
-    args:
-        - driver: a selenium webdriver object
-        - url: the url of the current page within the website
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
 
-    returns:
-        - a list of book titles (strings)    
-    """
-
-    book_titles = []
-    books = []
-    index = 0
+    driver = webdriver.Chrome("/chromedriver", options=chrome_options)
+    url = "https://parkingavailability.charlotte.edu/"
     
     driver.get(url)
+    html = driver.page_source
 
-    books = driver.find_elements(By.CLASS_NAME, "product_pod")
+    soup = BeautifulSoup(html, 'html.parser')
+    allTags = soup.find_all('app-list-item')
 
-    for book in books:
-        link = book.find_elements(By.XPATH, "//h3/a")
-        title = link[index].get_attribute("title")
+    parkingDecks = []
 
-        book_titles.append(title)
-        index += 1
+    for tag in allTags:
+        deckInfo = {}
+        percentTag = tag.find('app-percentage')
+        percent = percentTag.find('div')
+        text = percent.text.strip()
+        deckInfo['percent'] = text
+        deckInfo['percent_number'] = text.replace('%', '')
 
-    return book_titles
-
-
-def main():
-    driver = create_driver(get_chromedriver_path())
-    erase_file("titles.txt")
-    route_counts = {}
-    for route in ROUTES:
-        url = build_books_to_scrape_url(route)
-        book_titles = scrape_book_titles(driver, url)
-
-        route_counts[route] = len(book_titles)
-        write_titles_to_file("titles.txt", book_titles)
+        deck = tag.find('span', class_='deck-name')
+        deckInfo['name'] = deck.text.strip()
+        parkingDecks.append(deckInfo)
+        
     driver.quit()
 
-    index_page = "./docker/index.html"
-    if check_html_content_length(index_page):
-        erase_file(index_page)
-        write_html_header(index_page)
-    
-    write_lines_to_html_list(index_page, open("titles.txt", 'r').readlines())
-
-
-    write_smallest_and_largest_books(
-        "titles.txt", sort_dict_by_value(route_counts))
-
-
-if __name__ == '__main__':
-    main()
+    return parkingDecks

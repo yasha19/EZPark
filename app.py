@@ -5,7 +5,7 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 from flask import Flask, render_template, request, make_response, redirect, url_for, session
 from python.database.db import Database
-from python.web.scraper import get_parking_availability
+from python.web.parking import get_parking_availability
 
 app = Flask(__name__)
 app.secret_key = 'uCraR5MZB/AvVo3Q24cBM/fZo5Kv/hV2HW9y0b3puClB25h0lbjBP6vYsHzz1hVY'
@@ -21,7 +21,6 @@ db = Database()
 
 @app.route('/')
 def index_page():
-    print("index_page")
     global userId
     if  isValidSession(userId):
         return redirect(url_for('home_page'))
@@ -29,7 +28,6 @@ def index_page():
     
 @app.route('/login')
 def login_page():
-    print("login_page")
     global userId
     if isValidSession(userId):
         return redirect(url_for('home_page'))
@@ -37,7 +35,6 @@ def login_page():
     
 @app.route('/logout')
 def logout_page():
-    print("logout_page")
     global userId, profile, favorites, classes, alerts
     userId = None
     profile = None
@@ -49,15 +46,28 @@ def logout_page():
     
 @app.route('/about')
 def about_page():
-    print("about_page")
     global userId
     if isValidSession(userId):
         return render_template('about.html', backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
+@app.route('/profile', methods=['GET', 'POST'])
+def profile_page():
+    global userId, profile
+    if isValidSession(userId):
+        if request.method == 'GET':
+            return render_template('profile.html', backDisplay=True, aboutDisplay=False)
+        else:
+            print("saving user settings")
+
+            # profile.rec = request.form['rec']
+            # profile.comType = request.form['comType']
+            # db.update_profile(profile)
+            
+    return redirect(url_for('login_page'))
+
 @app.route('/home')
 def home_page():
-    print("home_page")
     global userId, profile
     if isValidSession(userId):
         if profile == None:
@@ -68,7 +78,6 @@ def home_page():
     
 @app.route('/home', methods=['POST'])
 def home_with_credentials_page():
-    print("home_with_credentials_page")
     global userId, profile
     
     try:
@@ -94,12 +103,9 @@ def home_with_credentials_page():
     
 @app.route('/map')
 def map_page():
-    print("map_page")
     global userId, favorites, addresses
     if isValidSession(userId):
-        percentages = get_parking_availability()
-        print(percentages)
-    
+        decks = get_parking_availability()
     
         # Pull favorites and addresses from database here
 
@@ -107,12 +113,11 @@ def map_page():
         # addresses = db.get_all_deck_info()
         # favorites = db.get_all_favorites_by_user(userId)
 
-        return render_template('interactive_map.html', favData=favorites, deckData=percentages, backDisplay=True, aboutDisplay=False)
+        return render_template('interactive_map.html', favData=favorites, deckData=decks, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
     
 @app.route('/classes')
 def classes_page():
-    print("classes_page")
     global userId, classes
     if isValidSession(userId):
         # Pull all the user classes here
@@ -124,7 +129,6 @@ def classes_page():
 
 @app.route('/add-classes', methods=['GET', 'POST'])
 def add_classes_page():
-    print("add_classes_page")
     global userId
     if isValidSession(userId):
         if request.method == 'GET':
@@ -166,6 +170,8 @@ def add_favorites_page():
             return render_template('add_favorites.html', backDisplay=True, aboutDisplay=False)
         else:
             # Put the code for adding a favorite here
+            # use Javascript to POST to add_favorites.html
+            # when Back button is pushed, redirect to favorites_page
 
             # EXAMPLE
             # deck = request.form['deck'] Address is already in the database for the deck

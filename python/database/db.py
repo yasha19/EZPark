@@ -28,6 +28,9 @@ class Database:
     def get_profile_by_id(self, user_id: str):
         self.cursor.execute("SELECT * FROM profile where email = ?", (user_id))
         return self.cursor.fetchall()
+    
+    def update_profile(self, profile):
+        self.cursor.execute("UPDATE profile SET rec = ? AND comType = ? WHERE userID = ?", (profile.rec, profile.comType, profile.userId))
 
     def get_all_classes_by_user(self, user_id: int):
         self.cursor.execute("SELECT * FROM classes WHERE cProfileID= ?", (user_id))
