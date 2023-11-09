@@ -5,6 +5,7 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 from flask import Flask, render_template, request, make_response, redirect, url_for, session
 from python.database.db import Database
+from python.web.scraper import get_parking_availability
 
 app = Flask(__name__)
 app.secret_key = 'uCraR5MZB/AvVo3Q24cBM/fZo5Kv/hV2HW9y0b3puClB25h0lbjBP6vYsHzz1hVY'
@@ -96,13 +97,17 @@ def map_page():
     print("map_page")
     global userId, favorites, addresses
     if isValidSession(userId):
+        percentages = get_parking_availability()
+        print(percentages)
+    
+    
         # Pull favorites and addresses from database here
 
         # EXAMPLE
         # addresses = db.get_all_deck_info()
         # favorites = db.get_all_favorites_by_user(userId)
 
-        return render_template('interactive_map.html', favData=favorites, mapData=addresses, backDisplay=True, aboutDisplay=False)
+        return render_template('interactive_map.html', favData=favorites, deckData=percentages, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
     
 @app.route('/classes')
@@ -205,5 +210,10 @@ def isValidSession(user_id):
         return True
     return False
 
+
+
+
 if __name__ == '__main__':
+    print('starting app...')
     app.run(ssl_context='adhoc', debug=True, host=HOST, port=PORT)
+    

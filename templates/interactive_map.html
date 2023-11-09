@@ -4,6 +4,14 @@
 
 {% include "header.html" %}
 
+<div class="parking-container">
+    <ul class="parking-decks-container">
+        {% for deck in deckData %}
+        <li class="parking-deck">{{ deck.name }} {{ deck.percent }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
 {% include "footer.html" %}
 
 {% endblock %}
