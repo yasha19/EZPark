@@ -159,6 +159,23 @@ body {
 
 .parking-decks-container .parking-deck {
     color: #C9E03C;
+    border-bottom: 1px solid #c9e03c;
+    display: block;
+    clear: both;
+    height: 30px;
+}
+
+.parking-decks-container .parking-deck span {
+    display: inline-block;
+    padding: 5px 2rem;
+}
+
+.parking-decks-container .parking-deck .name {
+    float: left;
+}
+
+.parking-decks-container .parking-deck .percent {
+    float: right;
 }
 
 .parking-decks-container .parking-deck .percent.regular {
@@ -166,5 +183,5 @@ body {
 }
 
 .parking-decks-container .parking-deck .percent.alert {
-    color: red;
+    color: #fe2626;
 }

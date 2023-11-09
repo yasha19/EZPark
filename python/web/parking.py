@@ -26,7 +26,7 @@ def get_parking_availability():
         percent = percentTag.find('div')
         text = percent.text.strip()
         deckInfo['percent'] = text
-        deckInfo['percent_number'] = text.replace('%', '')
+        deckInfo['percent_number'] = int(text.replace('%', ''))
 
         deck = tag.find('span', class_='deck-name')
         deckInfo['name'] = deck.text.strip()
