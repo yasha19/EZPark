@@ -120,10 +120,8 @@ def map_page():
 def classes_page():
     global userId, classes
     if isValidSession(userId):
-        # Pull all the user classes here
-
-        # EXAMPLE
-        # classes = db.get_all_classes_by_user(userId)
+        classes = []
+        classes = db.get_all_classes_by_user(userId)
         return render_template('classes.html', classData=classes, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
@@ -134,17 +132,11 @@ def add_classes_page():
         if request.method == 'GET':
             return render_template('add_classes.html', backDisplay=True, aboutDisplay=False)
         else:
-            # Put the code for adding a class here
-
-            # EXAMPLE
-            # course = request.form['course']
-            # location = request.form['location']
-            # days = request.form['days']
-            # time = request.form['time']
-
-            # populate class object then pass to db function
-            # db.insert_new_class(class)
-
+            course = request.form['course']
+            location = request.form['location']
+            days = request.form['days']
+            time = request.form['time']
+            db.insert_new_class(session['user_id'], location, days, time)
             return redirect(url_for('classes_page'))
     return redirect(url_for('login_page'))
 
