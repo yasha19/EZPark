@@ -2,13 +2,14 @@
     margin: 10px;
 }
 
-.favorites-header h1 {
-    display : inline-block;
+.header {
+    color: #C9E03C;
+    text-align: center;
     margin: 0;
-    font-size: 1.5em;
 }
 
 .favorites-header button i {
+    font-size: 15px;
     background: green;
 }
 
