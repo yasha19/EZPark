@@ -166,7 +166,7 @@ def add_favorites_page():
             # when Back button is pushed, redirect to favorites_page
 
             # EXAMPLE
-            deck = request.form['deck'] Address is already in the database for the deck
+            deck = request.form['deck'] 
              
             # populate fav object then pass to db function
             db.insert_new_favorite(fav)
