@@ -16,9 +16,9 @@ class Database:
             "INSERT INTO favorites (favoritesID, fprofileID, parkingName) VALUES (%s, %s, %s)", (None, student_id, parking_name))
         self.connection.commit()
 
-    def insert_new_class(self, student_id: str, building_name: str) -> None:
+    def insert_new_class(self, student_id: str, course_name: str, building_name: str) -> None:
         self.cursor.execute(
-            "INSERT INTO classes (cProfileID, buildingName) VALUES (%s, %s)", (student_id, building_name))
+            "INSERT INTO classes (cProfileID, courseName, buildingName) VALUES (%s, %s, %s)", (student_id, course_name, building_name))
         self.connection.commit()
 
     def get_all_parking_decks(self):
@@ -39,13 +39,13 @@ class Database:
         self.cursor.execute("UPDATE profile SET rec = %s, comType = %s WHERE userID = %s", (profile.rec, profile.comType, profile.userId))
         return self.cursor.fetchall()
 
-    def get_all_classes_by_user(self, user_id: int):
-        self.cursor.execute("SELECT * FROM classes WHERE cProfileID= %s", (user_id))
+    def get_all_classes_by_user(self, user_id: str):
+        self.cursor.execute("SELECT * FROM classes WHERE cProfileID= %s", (user_id,))
         return self.cursor.fetchall()
 
-    def get_all_favorites_by_user(self, user_id: int):
+    def get_all_favorites_by_user(self, user_id: str):
         self.cursor.execute(
-            "SELECT * FROM favorites WHERE fprofileID = %s", (user_id))
+            "SELECT * FROM favorites WHERE fprofileID = %s", (user_id,))
         return self.cursor.fetchall()
 
     def get_alerts_by_date(self, daytime: dt.date):
