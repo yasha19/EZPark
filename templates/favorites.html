@@ -3,13 +3,25 @@
 {% block content %}
 
 {% include "header.html" %}
+<div style="text-align: center; margin-bottom: 20px;">
+    <button onclick="location.href='{{ url_for('add_favorites_page') }}'">Favorites <i class="fa-sharp fa-solid fa-plus"></i></button>
+</div>
 
-<button>Favorites<i class="fa-sharp fa-solid fa-plus"></i></button>
-    
-    <ul>
-        <li> fav<i class="fa-sharp fa-solid fa-trash"></i></li>
+<div class="deck-container">
+    <ul class="deck-list">
+        {% for fav in favData %}
+            <li class="deck-item">
+                {{ fav.parkingName }} 
+                <a href="{{ url_for('remove_favorite', favorite_id=fav.favoritesID) }}">
+                    <i class="fa-sharp fa-solid fa-trash"></i>
+                </a>
+            </li>
+        {% else %}
+            <li>No favorites added yet.</li>
+        {% endfor %}
+    </ul>
+</div>
 
-    </ul> 
 {% include "footer.html" %}
 
 {% endblock %}
