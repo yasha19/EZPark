@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
 
 import datetime
+import jsonify
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from flask import Flask, render_template, request, make_response, redirect, url_for, session
 from python.database.db import Database
 from python.web.parking import get_parking_availability
+from urllib.parse import parse_qs
 
 app = Flask(__name__)
 app.secret_key = 'uCraR5MZB/AvVo3Q24cBM/fZo5Kv/hV2HW9y0b3puClB25h0lbjBP6vYsHzz1hVY'
 HOST, PORT = 'localhost', 8080
-global userId, profile, addresses, favorites, classes, alerts, db
+global userId, profile, buildings, favorites, classes, alerts, db
 userId = None
 profile = None
-addresses = None
 favorites = None
 classes = None
 alerts = None
 db = Database()
+buildings = db.get_all_buildings()
 
 @app.route('/')
 def index_page():
@@ -127,17 +129,20 @@ def classes_page():
 
 @app.route('/add-classes', methods=['GET', 'POST'])
 def add_classes_page():
-    global userId
+    global userId, buildings
     if isValidSession(userId):
         if request.method == 'GET':
-            return render_template('add_classes.html', backDisplay=True, aboutDisplay=False)
+            return render_template('add_classes.html', buildingData=buildings, backDisplay=True, aboutDisplay=False)
         else:
-            course = request.form['course']
-            location = request.form['location']
-            days = request.form['days']
-            time = request.form['time']
-            db.insert_new_class(session['user_id'], location, days, time)
-            return redirect(url_for('classes_page'))
+            data = request.data.decode('utf-8')
+            data = parse_qs(data)
+            course = data['course']
+            location = data['location']
+            print(course[0])
+            print(location[0])
+            # location = data.location
+            # db.insert_new_class(userId, class_, location)
+            return render_template('add_classes.html', buildingData=buildings, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
 @app.route('/favorites')

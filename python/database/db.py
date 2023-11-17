@@ -16,9 +16,9 @@ class Database:
             "INSERT INTO favorites (favoritesID, fprofileID, parkingName) VALUES (?, ?, ?)", (None, student_id, parking_name))
         self.connection.commit()
 
-    def insert_new_class(self, student_id: int, building_name: str, day: str, time: str) -> None:
+    def insert_new_class(self, student_id: int, building_name: str) -> None:
         self.cursor.execute(
-            "INSERT INTO classes (classesID, cProfileID, buildingName, day, time) VALUES (?, ?, ?, ?, ?)", (None, student_id, building_name, day, time))
+            "INSERT INTO classes (classesID, cProfileID, buildingName) VALUES (?, ?, ?)", (None, student_id, building_name))
         self.connection.commit()
 
     def get_all_parking_decks(self):
@@ -44,4 +44,8 @@ class Database:
     def get_alerts_by_date(self, daytime: dt.date):
         self.cursor.execute(
             "SELECT * FROM alerts WHERE date > ?", daytime)
+        return self.cursor.fetchall()
+    
+    def get_all_buildings(self):
+        self.cursor.execute("SELECT * FROM buildingNames")
         return self.cursor.fetchall()
