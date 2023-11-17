@@ -38,33 +38,11 @@
                 dataType: 'json',
                 success: function(data) {
                     console.log('successfully posted data! response body: ' + data);
-                    updateFavoritesList(favoriteName);
-                    updateSessionStorage(favoriteName);
                 }
             });
         
     }
 
-    function updateFavoritesList(favoriteName) {
-    var ul = document.querySelector('.favorites-list');
-    var li = document.createElement('li');
-    li.className = 'favorite-item';
-    li.textContent = favoriteName;
-    ul.appendChild(li);
-    }
-
-function updateSessionStorage(favoriteName) {
-    var favorites = JSON.parse(sessionStorage.getItem('favorites') || '[]');
-    favorites.push(favoriteName);
-    sessionStorage.setItem('favorites', JSON.stringify(favorites));
-}
-
-function loadFavoritesFromSession() {
-    var favorites = JSON.parse(sessionStorage.getItem('favorites') || '[]');
-    favorites.forEach(favoriteName => {
-        updateFavoritesList(favoriteName);
-    });
-}
     </script>
 
 {% include "footer.html" %}
