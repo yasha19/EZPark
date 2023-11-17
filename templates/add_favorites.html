@@ -4,6 +4,7 @@
 
 {% include "header.html" %}
 
+
 <div class="add-favorites-header">
     <h1 class="header">
         Add Favorite Parking
@@ -13,37 +14,35 @@
     <h2 class="label-header">
         Parking Location
     </h2>
-    <ul class="favorites-list">
-        {% for location in parkingLocations %}
-        <li class="favorite-item">
-            {{ location[4] }} 
-            <button onclick="addFavorite('{{ location[4] }}')" class="add-favorite-btn">
-                <i class="fa-sharp fa-solid fa-plus"></i>
-            </button>
-        </li>
-        {% endfor %}
-    </ul>
-
+    <input type="text" name="favorite-text" id="favorite"/>
 </div>
+    <select id="favorite-list">
+        {% for location in parkingLocation %}
+        <option class="parkingLocation" value="{{ location[1] }}">{{ location[1] }}
 
+        </option>
+        {% endfor %}
+    </select>
+    <div class="submit-favorite">
+        <button onclick="addFavorite()">Add Favorite</button>
+    </div>
+</div>
 <script>
     function addFavorite(favoriteName) {
     
-        console.log("Add favorite with Name:", favoriteName);
-        $.ajax({
-                type: "POST",
-                url: "/favorites",
-                data: { "favorite": favoriteName  }, 
-                contentType: 'application/json;charset=UTF-8',
-                dataType: 'json',
-                success: function(data) {
-                    console.log('successfully posted data! response body: ' + data);
-                }
-            });
-        
+    console.log("Add favorite with Name:", favoriteName);
+    $.ajax({
+            type: "POST",
+            url: "/favorites",
+            data: { "favorite": favoriteName  }, 
+            contentType: 'application/json;charset=UTF-8',
+            dataType: 'json',
+            success: function(data) {
+                console.log('successfully posted data! response body: ' + data);
+            }
+        });
     }
-
-    </script>
+</script>
 
 {% include "footer.html" %}
 
