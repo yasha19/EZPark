@@ -11,13 +11,13 @@ app = Flask(__name__)
 app.secret_key = 'uCraR5MZB/AvVo3Q24cBM/fZo5Kv/hV2HW9y0b3puClB25h0lbjBP6vYsHzz1hVY'
 HOST, PORT = 'localhost', 8080
 global userId, profile, addresses, favorites, classes, alerts, db
+db = Database()
 userId = None
 profile = None
 addresses = None
 favorites = None
 classes = None
 alerts = None
-db = Database()
 
 @app.route('/')
 def index_page():
@@ -35,11 +35,12 @@ def login_page():
     
 @app.route('/logout')
 def logout_page():
-    global userId, profile, favorites, classes, alerts
+    global userId, profile, favorites, classes, decks, alerts
     userId = None
     profile = None
     favorites = None
     classes = None
+    decks = None
     alerts = None
     session.pop('user_id', None)
     return redirect(url_for('login_page'))
@@ -103,9 +104,10 @@ def home_with_credentials_page():
     
 @app.route('/map')
 def map_page():
-    global userId, favorites, addresses
+    global userId, favorites, addresses, decks
     if isValidSession(userId):
-        decks = get_parking_availability()
+        # global decks
+        # decks = get_parking_availability()
     
         # Pull favorites and addresses from database here
 
@@ -113,7 +115,7 @@ def map_page():
         # addresses = db.get_all_deck_info()
         # favorites = db.get_all_favorites_by_user(userId)
 
-        return render_template('interactive_map.html', favData=favorites, deckData=decks, backDisplay=True, aboutDisplay=False)
+        return render_template('interactive_map.html', backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
     
 @app.route('/classes')

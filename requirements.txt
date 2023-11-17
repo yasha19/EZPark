@@ -4,9 +4,9 @@ plantuml==0.3.0
 six==1.16.0
 mysql-connector-python==8.2.0
 pyopenssl==23.3.0
-google==3.0.0
-google-api-python-client==2.106.0
-google-auth==1.6.3
-google-auth-httplib2==0.1.1
-google-auth-oauthlib==1.1.0
+google
+google-api-python-client
+google-auth
+google-auth-httplib2
+google-auth-oauthlib
 selenium==4.6.0

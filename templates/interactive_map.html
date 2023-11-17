@@ -4,6 +4,29 @@
 
 {% include "header.html" %}
 
+<div class="route-selection-container">
+    <div class="class-container">
+        <label for="class-selector">Class destination</label>
+        <select id="class-selector">
+            <option></option>
+        </select>
+    </div>
+
+    <div class="travel-mode-container">
+        <label for="travel-mode-selector">Method of travel</label>
+        <select id="travel-mode-selector">
+            <option value="DRIVING">Driving</option>
+            <option value="WALKING">Walking</option>
+            <option value="BICYCLING">Bicycling</option>
+            <option value="TRANSIT">Transit</option>
+        </select>
+    </div>
+
+</div>
+
+<div id="google-map-container">
+</div>
+
 <div class="parking-container">
     <ul class="parking-decks-container">
         {% for deck in deckData %}
@@ -17,6 +40,47 @@
         {% endfor %}
     </ul>
 </div>
+
+<script>
+    function getEZParkCoords(lat, long) {
+        return {
+            coords: {
+                latitude: lat,
+                longitude: long
+            }
+        };
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+            let ezp = getEZParkCoords(position.coords.latitude, position.coords.longitude);
+            const pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+            };
+            console.log(ezp.coords.latitude + ", " + ezp.coords.longitude);
+        });
+    }
+
+
+    async function initMap() {
+        const { Map } = await google.maps.importLibrary("maps");
+        const { DirectionsService } = await google.maps.importLibrary("routes");
+        const { DirectionsRenderer } = await google.maps.importLibrary("routes");
+        var directionsService = new DirectionsService();
+        var directionsRenderer = new DirectionsRenderer();
+        var uncc = new google.maps.LatLng(35.30715560913086, -80.73516082763672);
+        var mapOptions = {
+            zoom:10,
+            center: uncc
+        }
+        var map = new Map(document.getElementById('google-map-container'), mapOptions);
+        directionsRenderer.setMap(map);
+    }
+
+    initMap();
+</script>
 
 {% include "footer.html" %}
 
