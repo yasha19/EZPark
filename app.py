@@ -170,7 +170,7 @@ def favorites_pages():
     if isValidSession(userId):
         data = request.data.decode('utf-8')
         data = parse_qs(data)
-        favName = data['favoriteName']
+        favName = data['favorite']
         
         print(favName[0])
         db.remove_favorite(userId, favName)
@@ -185,14 +185,15 @@ def add_favorites_page():
     global userId, parking_decks
     if isValidSession(userId):
         if request.method == 'GET':
+            print(parking_decks)
             return render_template('add_favorites.html', backDisplay=True, aboutDisplay=False, parkingLocations=parking_decks)
         else:
             data = request.data.decode('utf-8')
             data = parse_qs(data)
-            favName = data['favoriteName']
-            location = data['parkingLocation']
+            favName = data['favorite']
+
             print(favName)
-            db.insert_new_favorite(userId, favName)
+            db.insert_new_favorite(userId, favName[0])
 
             return redirect(url_for('favorites_page'))
     return redirect(url_for('login_page'))
