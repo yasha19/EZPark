@@ -5,8 +5,9 @@ six==1.16.0
 mysql-connector-python==8.2.0
 pyopenssl==23.3.0
 google
+google-api-core==1.26.0
 google-api-python-client
-google-auth
+google-auth==1.24.0
 google-auth-httplib2
 google-auth-oauthlib
 selenium==4.6.0
