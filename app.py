@@ -92,9 +92,19 @@ def home_with_credentials_page():
         userId = userid
         session['user_id'] = userid
         session['g_csrf_token'] = token
-
+        
+        # Email for student account to be used in all other calls
+        email = decoded_token['email']
+        
+        # Student account name
+        FName = decoded_token['given_name']
+        LName = decoded_token['family_name']
+        
+        # Get profile ID, insert new profile if userId doesn't exist
         print("Retrieving user profile")
-        # profile = db.get_profile_by_id(userId)
+        profile = db.get_profile_by_id(str(userId))
+        if profile == None:
+            db.insert_new_profile(str(userId), FName, LName, email)
 
         home_page = make_response(redirect(url_for('home_page')))
         home_page.set_cookie('g_csrf_token', token)
@@ -107,15 +117,17 @@ def home_with_credentials_page():
 def map_page():
     global userId, favorites, addresses
     if isValidSession(userId):
-        decks = get_parking_availability()
-    
-        # Pull favorites and addresses from database here
+        classes = []
+        courses = db.get_all_classes_by_user(userId)
+        for class_ in courses:
+            for building in buildings:
+                if class_[1] == building[1]:
+                    address = f'{building[2]}, {building[3]}, {building[4]} {building[5]}'
+                    newClass = class_ + (address,)
+                    classes.append(newClass)
+        print(classes)
 
-        # EXAMPLE
-        # addresses = db.get_all_deck_info()
-        # favorites = db.get_all_favorites_by_user(userId)
-
-        return render_template('interactive_map.html', favData=favorites, deckData=decks, backDisplay=True, aboutDisplay=False)
+        return render_template('interactive_map.html', classData=classes, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
     
 @app.route('/classes')
@@ -138,10 +150,7 @@ def add_classes_page():
             data = parse_qs(data)
             course = data['course']
             location = data['location']
-            print(course[0])
-            print(location[0])
-            # location = data.location
-            # db.insert_new_class(userId, class_, location)
+            db.insert_new_class(userId, course[0], location[0])
             return render_template('add_classes.html', buildingData=buildings, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
