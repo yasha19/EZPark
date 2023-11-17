@@ -92,6 +92,13 @@ def home_with_credentials_page():
         userId = userid
         session['user_id'] = userid
         session['g_csrf_token'] = token
+        
+        # Email for student account to be used in all other calls
+        email = decoded_token['email']
+        
+        # Student account name
+        FName = decoded_token['given_name']
+        LName = decoded_token['family_name'] 
 
         print("Retrieving user profile")
         # profile = db.get_profile_by_id(userId[0])
