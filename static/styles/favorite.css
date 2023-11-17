@@ -1,29 +1,28 @@
-
-.favorite-header {
-    margin: 10px;
-}
-
-.header {
-    color: #C9E03C;
-    text-align: center;
-    margin: 0;
-}
-
-.label-header {
-    color: #C9E03C;
-    text-shadow: black;
-}
-
-.favorite-container {
-    width: 75%;
-    margin: 0 auto;
-}
-
-.fa-plus {
-    color: black;
-    font-size: 15px;
-}
-
-.submit-class button {
-    margin-top: 2rem;
-}
+.favorites-header {
+    background-color: #377B2B; 
+    color: white;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+  }
+  
+  .favorites-header .header {
+    font-size: 35px;
+    margin-right: 10px; 
+  }
+  
+  .add-favorite-btn {
+    font-size: 30px;
+    color: white;
+    background-color: #4CAF50; 
+    border: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 5px; 
+  }
+  
+  .favorites-header .fa-plus {
+    margin-left: 5px;
+  }
+  
