@@ -51,4 +51,8 @@ class Database:
     
     def get_all_buildings(self):
         self.cursor.execute("SELECT * FROM buildingNames")
+<<<<<<< HEAD
         return self.cursor.fetchall()
+=======
+        return self.cursor.fetchall()
+>>>>>>> 221388023d1d5f1b705ac64cc67c60c2df1ae93b

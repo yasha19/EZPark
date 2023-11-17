@@ -228,4 +228,3 @@ def isValidSession(user_id):
 if __name__ == '__main__':
     print('starting app...')
     app.run(ssl_context='adhoc', debug=True, host=HOST, port=PORT)
-    
