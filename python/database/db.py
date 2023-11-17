@@ -16,13 +16,13 @@ class Database:
             "INSERT INTO favorites (favoritesID, fprofileID, parkingName) VALUES (?, ?, ?)", (None, student_id, parking_name))
         self.connection.commit()
 
-    def insert_new_class(self, student_id: int, building_name: str, day: str, time: str) -> None:
+    def insert_new_class(self, student_id: int, building_name: str) -> None:
         self.cursor.execute(
-            "INSERT INTO classes (classesID, cProfileID, buildingName, day, time) VALUES (?, ?, ?, ?, ?)", (None, student_id, building_name, day, time))
+            "INSERT INTO classes (classesID, cProfileID, buildingName) VALUES (?, ?, ?)", (None, student_id, building_name))
         self.connection.commit()
 
     def get_all_parking_decks(self):
-        self.cursor.execute("SELECT * FROM parking")
+        self.cursor.execute("SELECT * FROM parkingLocations")
         return self.cursor.fetchall()
     
     def get_profile_by_id(self, user_id: str):
@@ -31,17 +31,24 @@ class Database:
     
     def update_profile(self, profile):
         self.cursor.execute("UPDATE profile SET rec = ? AND comType = ? WHERE userID = ?", (profile.rec, profile.comType, profile.userId))
-
+    
+    def remove_favorite(self, user_id, location):
+        print(location)
+        self.cursor.execute("DELETE FROM favorites WHERE fprofileID = ? AND parkingName = ?", (user_id, location))
+    
     def get_all_classes_by_user(self, user_id: int):
         self.cursor.execute("SELECT * FROM classes WHERE cProfileID= ?", (user_id))
         return self.cursor.fetchall()
 
     def get_all_favorites_by_user(self, user_id: int):
-        self.cursor.execute(
-            "SELECT * FROM favorites WHERE fprofileID = ?", (user_id))
+        self.cursor.execute("SELECT * FROM favorites WHERE fprofileID = %s", (user_id,))
         return self.cursor.fetchall()
 
     def get_alerts_by_date(self, daytime: dt.date):
         self.cursor.execute(
             "SELECT * FROM alerts WHERE date > ?", daytime)
+        return self.cursor.fetchall()
+    
+    def get_all_buildings(self):
+        self.cursor.execute("SELECT * FROM buildingNames")
         return self.cursor.fetchall()
