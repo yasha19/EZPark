@@ -133,6 +133,7 @@ def classes_page():
     if isValidSession(userId):
         classes = []
         classes = db.get_all_classes_by_user((userId,))
+        print(classes)
         return render_template('classes.html', classData=classes, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
