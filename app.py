@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import datetime
-import jsonify
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from flask import Flask, render_template, request, make_response, redirect, url_for, session
@@ -92,6 +91,15 @@ def home_with_credentials_page():
         userId = userid
         session['user_id'] = userid
         session['g_csrf_token'] = token
+        
+        # Email for student account to be used in all other calls
+        email = decoded_token['email']
+        
+        # Student account name
+        FName = decoded_token['given_name']
+        LName = decoded_token['family_name']
+        
+        db.insert_new_profile(str(userId), FName, LName, email) 
 
         print("Retrieving user profile")
         # profile = db.get_profile_by_id(userId[0])
