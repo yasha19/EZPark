@@ -30,10 +30,10 @@ class Database:
         self.cursor.execute("SELECT * FROM profile where gid = %s", user_id)
         return self.cursor.fetchone()
     
-    # def insert_new_profile(self, user_id: str, email: str):
-    #     self.cursor.execute("INSERT INTO profile (gid, email) VALUES (%s, %s)", (user_id, email))
-    #     self.connection.commit()
-    #     return self.cursor.fetchall()
+    def insert_new_profile(self, user_id: str, FName: str, LName: str, email: str ):
+        self.cursor.execute("INSERT INTO profile (gid, FName, LName, email) VALUES (%s, %s, %s, %s)", (user_id, FName, LName, email))
+        self.connection.commit()
+        return self.cursor.fetchall()
     
     def update_profile(self, profile):
         self.cursor.execute("UPDATE profile SET rec = %s, comType = %s WHERE userID = %s", (profile.rec, profile.comType, profile.userId))
