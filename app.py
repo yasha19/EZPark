@@ -153,7 +153,7 @@ def favorites_page():
         # Pull all the favorites here
 
         # EXAMPLE
-        # favorites = db.get_all_favorites_by_user(userId)
+        favorites = db.get_all_favorites_by_user(userId)
 
         return render_template('favorites.html', favData=favorites, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))  
@@ -171,10 +171,10 @@ def add_favorites_page():
             # when Back button is pushed, redirect to favorites_page
 
             # EXAMPLE
-            # deck = request.form['deck'] Address is already in the database for the deck
+            deck = request.form['deck'] 
              
             # populate fav object then pass to db function
-            # db.insert_new_favorite(fav)
+            db.insert_new_favorite(fav)
 
             return redirect(url_for('favorites_page'))
     return redirect(url_for('login_page'))
