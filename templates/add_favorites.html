@@ -4,11 +4,45 @@
 
 {% include "header.html" %}
 
-<div class="add-favs-container">
-    <select class="favs-list">
-        <option class="fav-item">West Deck</option>
-    </select>
+
+<div class="add-favorites-header">
+    <h1 class="header">
+        Add Favorite Parking
+    </h1>
 </div>
+<div class="parking-container">
+    <h2 class="label-header">
+        Parking Location
+    </h2>
+    <input type="text" name="favorite-text" id="favorite"/>
+</div>
+    <select id="favorite-list">
+        {% for location in parkingLocation %}
+        <option class="parkingLocation" value="{{ location[1] }}">{{ location[1] }}
+
+        </option>
+        {% endfor %}
+    </select>
+    <div class="submit-favorite">
+        <button onclick="addFavorite()">Add Favorite</button>
+    </div>
+</div>
+<script>
+    function addFavorite(favoriteName) {
+    
+    console.log("Add favorite with Name:", favoriteName);
+    $.ajax({
+            type: "POST",
+            url: "/favorites",
+            data: { "favorite": favoriteName  }, 
+            contentType: 'application/json;charset=UTF-8',
+            dataType: 'json',
+            success: function(data) {
+                console.log('successfully posted data! response body: ' + data);
+            }
+        });
+    }
+</script>
 
 {% include "footer.html" %}
 
