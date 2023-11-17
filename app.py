@@ -182,7 +182,7 @@ def add_favorites_page():
             data = parse_qs(data)
             favName = data['favoriteName']
             location = data['parkingLocation']
-            print(favName[0])
+            print(favName)
             db.insert_new_favorite(userId, favName)
 
             return redirect(url_for('favorites_page'))
