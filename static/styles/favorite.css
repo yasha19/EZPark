@@ -1,19 +1,5 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    margin: 0;
-    padding: 0;
-}
-
-
 .favorites-header {
-    display: inline-block;
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    margin: 10px;
 }
 
 .favorites-header h1 {
@@ -24,18 +10,11 @@ body {
 
 .favorites-header button i {
     background: green;
-    border: none;
-    border-radius: 50%;
-    padding: 0.5em;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .fa-plus {
     color: black;
-    font-size: 1.5em;
+    font-size: 15px;
 }
 
 .favorites-list {
