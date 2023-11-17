@@ -1,5 +1,5 @@
 
-.classes-header {
+.favorite-header {
     margin: 10px;
 }
 
@@ -14,18 +14,14 @@
     text-shadow: black;
 }
 
-.course-container {
+.favorite-container {
     width: 75%;
     margin: 0 auto;
 }
 
-.location-container {
-    width: 75%;
-    margin: 0 auto;
-}
-
-#label-list {
-    width: 100%;
+.fa-plus {
+    color: black;
+    font-size: 15px;
 }
 
 .submit-class button {
