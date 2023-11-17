@@ -1,1 +1,47 @@
+{% extends "layout.html" %}
 
+{% block content %}
+
+{% include "header.html" %}
+
+<div class="favorites-header">
+    <h1 class="header">
+        Favorites
+    </h1>
+    <button onclick="location.href='/add-favorites'" class="add-favorite-btn">
+        <i class="fa-sharp fa-solid fa-plus"></i>
+    </button>
+</div>
+
+<ul class="favorites-list">
+    {% for fav in favData %}
+    <li class="favorite-item">
+        {{ fav.name }} 
+        <button onclick="removeFavorite('{{ fav.name }}')" class="delete-favorite-btn">
+            <i class="fa-sharp fa-solid fa-trash"></i>
+        </button>
+    </li>
+    {% endfor %}
+</ul>
+
+<script>
+function removeFavorite(favoriteName) {
+
+    console.log("Remove favorite with Name:", favoriteName);
+    $.ajax({
+            type: "POST",
+            url: "/favorites",
+            data: { "favorite": favoriteName  }, 
+            contentType: 'application/json;charset=UTF-8',
+            dataType: 'json',
+            success: function(data) {
+                console.log('successfully posted data! response body: ' + data);
+            }
+        });
+    
+}
+</script>
+
+{% include "footer.html" %}
+
+{% endblock %}
