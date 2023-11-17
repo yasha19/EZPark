@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
 
 import datetime
+import jsonify
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from flask import Flask, render_template, request, make_response, redirect, url_for, session
 from python.database.db import Database
 from python.web.parking import get_parking_availability
+from urllib.parse import parse_qs
 
 app = Flask(__name__)
 app.secret_key = 'uCraR5MZB/AvVo3Q24cBM/fZo5Kv/hV2HW9y0b3puClB25h0lbjBP6vYsHzz1hVY'
 HOST, PORT = 'localhost', 8080
-global userId, profile, addresses, favorites, classes, alerts, db
-db = Database()
+global userId, profile, buildings, favorites, classes, alerts, db
 userId = None
 profile = None
-addresses = None
 favorites = None
 classes = None
 alerts = None
+db = Database()
+buildings = db.get_all_buildings()
 
 @app.route('/')
 def index_page():
@@ -35,12 +37,11 @@ def login_page():
     
 @app.route('/logout')
 def logout_page():
-    global userId, profile, favorites, classes, decks, alerts
+    global userId, profile, favorites, classes, alerts
     userId = None
     profile = None
     favorites = None
     classes = None
-    decks = None
     alerts = None
     session.pop('user_id', None)
     return redirect(url_for('login_page'))
@@ -93,7 +94,7 @@ def home_with_credentials_page():
         session['g_csrf_token'] = token
 
         print("Retrieving user profile")
-        # profile = db.get_profile_by_id(userId)
+        # profile = db.get_profile_by_id(userId[0])
 
         home_page = make_response(redirect(url_for('home_page')))
         home_page.set_cookie('g_csrf_token', token)
@@ -104,10 +105,9 @@ def home_with_credentials_page():
     
 @app.route('/map')
 def map_page():
-    global userId, favorites, addresses, decks
+    global userId, favorites, addresses
     if isValidSession(userId):
-        # global decks
-        # decks = get_parking_availability()
+        decks = get_parking_availability()
     
         # Pull favorites and addresses from database here
 
@@ -115,39 +115,30 @@ def map_page():
         # addresses = db.get_all_deck_info()
         # favorites = db.get_all_favorites_by_user(userId)
 
-        return render_template('interactive_map.html', backDisplay=True, aboutDisplay=False)
+        return render_template('interactive_map.html', favData=favorites, deckData=decks, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
     
 @app.route('/classes')
 def classes_page():
     global userId, classes
     if isValidSession(userId):
-        # Pull all the user classes here
-
-        # EXAMPLE
-        # classes = db.get_all_classes_by_user(userId)
+        classes = []
+        classes = db.get_all_classes_by_user(userId)
         return render_template('classes.html', classData=classes, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
 @app.route('/add-classes', methods=['GET', 'POST'])
 def add_classes_page():
-    global userId
+    global userId, buildings
     if isValidSession(userId):
         if request.method == 'GET':
-            return render_template('add_classes.html', backDisplay=True, aboutDisplay=False)
+            return render_template('add_classes.html', buildingData=buildings, backDisplay=True, aboutDisplay=False)
         else:
-            # Put the code for adding a class here
-
-            # EXAMPLE
-            # course = request.form['course']
-            # location = request.form['location']
-            # days = request.form['days']
-            # time = request.form['time']
-
-            # populate class object then pass to db function
-            # db.insert_new_class(class)
-
-            return redirect(url_for('classes_page'))
+            data = request.data.decode('utf-8')
+            data = parse_qs(data)
+            location = data['location']
+            db.insert_new_class(str(userId), location[0])
+            return render_template('add_classes.html', buildingData=buildings, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
 @app.route('/favorites')
@@ -158,7 +149,7 @@ def favorites_page():
         # Pull all the favorites here
 
         # EXAMPLE
-        # favorites = db.get_all_favorites_by_user(userId)
+        favorites = db.get_all_favorites_by_user(userId)
 
         return render_template('favorites.html', favData=favorites, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))  
@@ -176,10 +167,10 @@ def add_favorites_page():
             # when Back button is pushed, redirect to favorites_page
 
             # EXAMPLE
-            # deck = request.form['deck'] Address is already in the database for the deck
+            deck = request.form['deck'] 
              
             # populate fav object then pass to db function
-            # db.insert_new_favorite(fav)
+            db.insert_new_favorite(fav)
 
             return redirect(url_for('favorites_page'))
     return redirect(url_for('login_page'))
