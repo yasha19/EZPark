@@ -99,10 +99,11 @@ def home_with_credentials_page():
         FName = decoded_token['given_name']
         LName = decoded_token['family_name']
         
-        db.insert_new_profile(str(userId), FName, LName, email) 
-
+        # Get profile ID, insert new profile if userId doesn't exist
         print("Retrieving user profile")
-        # profile = db.get_profile_by_id(userId[0])
+        profile = db.get_profile_by_id(str(userId))
+        if profile == None:
+            db.insert_new_profile(str(userId), FName, LName, email)
 
         home_page = make_response(redirect(url_for('home_page')))
         home_page.set_cookie('g_csrf_token', token)
