@@ -27,7 +27,7 @@ class Database:
     
     def get_profile_by_id(self, user_id: str):
         # user_id_tuple = tuple(user_id,)
-        self.cursor.execute("SELECT * FROM profile where gid = %s", user_id)
+        self.cursor.execute("SELECT * FROM profile where gid = %s", (user_id,))
         return self.cursor.fetchone()
     
     def insert_new_profile(self, user_id: str, FName: str, LName: str, email: str ):
