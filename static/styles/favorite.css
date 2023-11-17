@@ -1,10 +1,10 @@
-
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
     margin: 0;
     padding: 0;
 }
+
 
 .favorites-header {
     background-color: #4CAF50;
@@ -16,43 +16,66 @@ body {
 }
 
 .favorites-header h1 {
+    display : inline-block;
     margin: 0;
     font-size: 1.5em;
 }
 
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    margin: 0;
-    padding: 0;
-}
-
-.favorites-header {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.favorites-header .plusbtn {
-    font-size: 30px;
-    background-color: black;
-    margin: 15px 10px;
-    position: relative;
-    
+.favorites-header button i {
+    background: green;
     border: none;
+    border-radius: 50%;
+    padding: 0.5em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.favorites-header .plusbtn i{
-    pointer-events: none;
-}
-
-
-.favorites-header h1 {
-    display: inline-block;
-    margin: 0;
+.fa-plus {
+    color: black;
     font-size: 1.5em;
 }
 
+.favorites-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.favorite-item {
+    background: white;
+    margin: 0.5em;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.favorite-item .percentage {
+    background: #ddd;
+    border-radius: 5px;
+    padding: 3px 10px;
+    margin-left: 10px;
+}
+
+.delete-favorite-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.fa-trash {
+    color: red;
+}
+
+@media (max-width: 768px) {
+    .favorites-header h1 {
+        font-size: 1.2em;
+    }
+
+    .favorite-item .percentage {
+        padding: 2px 7px;
+    }
+}
