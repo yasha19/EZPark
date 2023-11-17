@@ -8,7 +8,11 @@
     <div class="class-container">
         <label for="class-selector">Class destination</label>
         <select id="class-selector">
-            <option></option>
+            {% for course in classData %}
+                {% if course[4] != "": %}
+                <option class="course-option" value="{{ course[7] }}">{{ course[4] }}</option>
+                {% endif %}
+            {% endfor %}
         </select>
     </div>
 
