@@ -94,7 +94,7 @@ def home_with_credentials_page():
         session['g_csrf_token'] = token
 
         print("Retrieving user profile")
-        # profile = db.get_profile_by_id(userId)
+        # profile = db.get_profile_by_id(userId[0])
 
         home_page = make_response(redirect(url_for('home_page')))
         home_page.set_cookie('g_csrf_token', token)
@@ -136,12 +136,8 @@ def add_classes_page():
         else:
             data = request.data.decode('utf-8')
             data = parse_qs(data)
-            course = data['course']
             location = data['location']
-            print(course[0])
-            print(location[0])
-            # location = data.location
-            # db.insert_new_class(userId, class_, location)
+            db.insert_new_class(str(userId), location[0])
             return render_template('add_classes.html', buildingData=buildings, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 

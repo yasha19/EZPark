@@ -11,14 +11,14 @@ class Database:
         )
         self.cursor = self.connection.cursor()
 
-    def insert_new_favorite(self, student_id: int, parking_name:str) -> None:
+    def insert_new_favorite(self, student_id: str, parking_name:str) -> None:
         self.cursor.execute(
-            "INSERT INTO favorites (favoritesID, fprofileID, parkingName) VALUES (?, ?, ?)", (None, student_id, parking_name))
+            "INSERT INTO favorites (favoritesID, fprofileID, parkingName) VALUES (%s, %s, %s)", (None, student_id, parking_name))
         self.connection.commit()
 
-    def insert_new_class(self, student_id: int, building_name: str) -> None:
+    def insert_new_class(self, student_id: str, building_name: str) -> None:
         self.cursor.execute(
-            "INSERT INTO classes (classesID, cProfileID, buildingName) VALUES (?, ?, ?)", (None, student_id, building_name))
+            "INSERT INTO classes (cProfileID, buildingName) VALUES (%s, %s)", (student_id, building_name))
         self.connection.commit()
 
     def get_all_parking_decks(self):
@@ -26,24 +26,31 @@ class Database:
         return self.cursor.fetchall()
     
     def get_profile_by_id(self, user_id: str):
-        self.cursor.execute("SELECT * FROM profile where email = ?", (user_id))
-        return self.cursor.fetchall()
+        # user_id_tuple = tuple(user_id,)
+        self.cursor.execute("SELECT * FROM profile where gid = %s", user_id)
+        return self.cursor.fetchone()
+    
+    # def insert_new_profile(self, user_id: str, email: str):
+    #     self.cursor.execute("INSERT INTO profile (gid, email) VALUES (%s, %s)", (user_id, email))
+    #     self.connection.commit()
+    #     return self.cursor.fetchall()
     
     def update_profile(self, profile):
-        self.cursor.execute("UPDATE profile SET rec = ? AND comType = ? WHERE userID = ?", (profile.rec, profile.comType, profile.userId))
+        self.cursor.execute("UPDATE profile SET rec = %s, comType = %s WHERE userID = %s", (profile.rec, profile.comType, profile.userId))
+        return self.cursor.fetchall()
 
     def get_all_classes_by_user(self, user_id: int):
-        self.cursor.execute("SELECT * FROM classes WHERE cProfileID= ?", (user_id))
+        self.cursor.execute("SELECT * FROM classes WHERE cProfileID= %s", (user_id))
         return self.cursor.fetchall()
 
     def get_all_favorites_by_user(self, user_id: int):
         self.cursor.execute(
-            "SELECT * FROM favorites WHERE fprofileID = ?", (user_id))
+            "SELECT * FROM favorites WHERE fprofileID = %s", (user_id))
         return self.cursor.fetchall()
 
     def get_alerts_by_date(self, daytime: dt.date):
         self.cursor.execute(
-            "SELECT * FROM alerts WHERE date > ?", daytime)
+            "SELECT * FROM alerts WHERE date > %s", daytime)
         return self.cursor.fetchall()
     
     def get_all_buildings(self):
