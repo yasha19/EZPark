@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import datetime
-import jsonify
+#import jsonify
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from flask import Flask, render_template, request, make_response, redirect, url_for, session
@@ -12,7 +12,7 @@ from urllib.parse import parse_qs
 app = Flask(__name__)
 app.secret_key = 'uCraR5MZB/AvVo3Q24cBM/fZo5Kv/hV2HW9y0b3puClB25h0lbjBP6vYsHzz1hVY'
 HOST, PORT = 'localhost', 8080
-global userId, profile, buildings, favorites, classes, alerts, db
+global userId, profile, buildings, favorites, classes, alerts, db, parking_decks
 userId = None
 profile = None
 favorites = None
@@ -20,6 +20,7 @@ classes = None
 alerts = None
 db = Database()
 buildings = db.get_all_buildings()
+parking_decks = db.get_all_parking_decks()
 
 @app.route('/')
 def index_page():
@@ -150,13 +151,24 @@ def favorites_page():
     print("favorites_page")
     global userId, favorites
     if isValidSession(userId):
-        # Pull all the favorites here
-
-        # EXAMPLE
-        favorites = db.get_all_favorites_by_user(userId)
-
+        user_id_int = int(userId)
+        favorites = db.get_all_favorites_by_user(user_id_int)
         return render_template('favorites.html', favData=favorites, backDisplay=True, aboutDisplay=False)
-    return redirect(url_for('login_page'))  
+    return redirect(url_for('login_page')) 
+
+@app.route('/favorites', methods=['POST'])
+def favorites_pages():
+    global userId
+    if isValidSession(userId):
+        data = request.data.decode('utf-8')
+        data = parse_qs(data)
+        favName = data['favoriteName']
+        
+        print(favName[0])
+        db.remove_favorite(userId, favName)
+
+        return redirect(url_for('favorites_page'))
+    return redirect(url_for('login_page')) 
 
 @app.route('/add-favorites', methods=['GET','POST'])
 def add_favorites_page():
@@ -164,17 +176,14 @@ def add_favorites_page():
     global userId
     if isValidSession(userId):
         if request.method == 'GET':
-            return render_template('add_favorites.html', backDisplay=True, aboutDisplay=False)
+            return render_template('add_favorites.html', backDisplay=True, aboutDisplay=False, parkingLocations=parking_decks)
         else:
-            # Put the code for adding a favorite here
-            # use Javascript to POST to add_favorites.html
-            # when Back button is pushed, redirect to favorites_page
-
-            # EXAMPLE
-            deck = request.form['deck'] 
-             
-            # populate fav object then pass to db function
-            db.insert_new_favorite(fav)
+            data = request.data.decode('utf-8')
+            data = parse_qs(data)
+            favName = data['favoriteName']
+            
+            print(favName[0])
+            db.insert_new_favorite(userId, favName)
 
             return redirect(url_for('favorites_page'))
     return redirect(url_for('login_page'))
