@@ -19,3 +19,40 @@ body {
     margin: 0;
     font-size: 1.5em;
 }
+
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+.favorites-header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.favorites-header .plusbtn {
+    font-size: 30px;
+    background-color: black;
+    margin: 15px 10px;
+    position: relative;
+    
+    border: none;
+}
+
+.favorites-header .plusbtn i{
+    pointer-events: none;
+}
+
+
+.favorites-header h1 {
+    display: inline-block;
+    margin: 0;
+    font-size: 1.5em;
+}
+
