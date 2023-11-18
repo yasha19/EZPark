@@ -8,6 +8,7 @@
     <div class="class-container">
         <label for="class-selector">Class destination</label>
         <select id="class-selector">
+            <option class="course-option" value="" selected></option>
             {% for course in classData %}
                 {% if course[4] != "": %}
                 <option class="course-option" value="{{ course[7] }}">{{ course[4] }}</option>
@@ -19,19 +20,28 @@
     <div class="travel-mode-container">
         <label for="travel-mode-selector">Method of travel</label>
         <select id="travel-mode-selector">
-            <option value="DRIVING">Driving</option>
-            <option value="WALKING">Walking</option>
-            <option value="BICYCLING">Bicycling</option>
-            <option value="TRANSIT">Transit</option>
+            <option class="mode-option" value="" value="" selected></option>
+            <option class="mode-option" value="DRIVING">Driving</option>
+            <option class="mode-option" value="WALKING">Walking</option>
+            <option class="mode-option" value="BICYCLING">Bicycling</option>
+            <option class="mode-option" value="TRANSIT">Transit</option>
         </select>
     </div>
-
+    <div class="calculation-container">
+        <p>Best Route: <span id="best-route"></span></p>
+        <p>Duration: <span id="duration"></span></p>
+    </div>
+    <select id="hidden-lot-select">
+        {% for lot in parkingData %}
+            <option class="lot-option" value="{{ lot[1] }}">{{ lot[0] }}</option>
+        {% endfor %}
+    </select>
 </div>
 
 <div id="google-map-container">
 </div>
 
-<div class="parking-container">
+<!-- <div class="parking-container">
     <ul class="parking-decks-container">
         {% for deck in deckData %}
         <li class="parking-deck"><span class="name">{{ deck.name }}</span> 
@@ -43,47 +53,122 @@
         </li>
         {% endfor %}
     </ul>
-</div>
+</div> -->
 
-<script>
-    function getEZParkCoords(lat, long) {
-        return {
-            coords: {
-                latitude: lat,
-                longitude: long
-            }
-        };
-    }
+<script>    
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-            let ezp = getEZParkCoords(position.coords.latitude, position.coords.longitude);
-            const pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
+    let routes = [];
+    let map;
+    const lotLocations = document.getElementById("hidden-lot-select").options;
+
+    function calculateRoute(directionsService, directionsRenderer, position) {
+        var orig;
+        let courseLocation =  document.getElementById("class-selector").value;
+        let lotLocations = document.getElementById("hidden-lot-select").options;
+        let mode = document.getElementById("travel-mode-selector").value;
+
+        if (position != null && mode != "DRIVING") {
+            orig = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            map.setCenter(orig);
+            directionsRenderer.setMap(map);
+        }
+
+        if (courseLocation && mode) {
+            for (var i = 0; i < lotLocations.length; i++) {
+                let selectValue = lotLocations[i].value;
+                 if (position == null || mode == "DRIVING") {
+                    orig = {
+                        query: selectValue
+                    }
+                }
+                var route = {
+                    origin: orig,
+                    destination: {
+                        query: courseLocation
+                    },
+                    travelMode: mode
+                };
+
+                directionsService.route(route, (response, status) => {
+                    if (status == "OK") {
+                        let directionsData = response.routes[0].legs[0];
+                        if (directionsData) {
+                            if (directionsData.distance.text.includes("ft")){
+                                let conversion = parseInt(directionsData.distance.text.replace("ft", ""));
+                                conversion = parseFloat(conversion / 5280).toFixed(2);
+                                routes.push({
+                                    routeData: response, 
+                                    distance: conversion, 
+                                    initial_value: route
+                                });
+                            } else {
+                                routes.push({
+                                    routeData: response, 
+                                    distance: parseFloat(directionsData.distance.text.replace("mi", "")).toFixed(2), 
+                                    initial_value: route
+                                });
+                            }                            
+                        }
+                    }               
+                });
             };
-            console.log(ezp.coords.latitude + ", " + ezp.coords.longitude);
-        });
+
+            if (routes != 0) {
+                let shortestRoute = routes.reduce((prev, curr) => {
+                    return parseInt(prev.distance) < parseInt(curr.distance) ? prev : curr;
+                });
+                directionsRenderer.setDirections(shortestRoute.routeData);
+                let legData = shortestRoute.routeData.routes[0].legs[0];
+                document.getElementById("best-route").innerHTML = legData.distance.text;
+                document.getElementById("duration").innerHTML = legData.duration.text;
+            } 
+        }
+               
     }
 
-
-    async function initMap() {
+    async function geoLocationInit(position) {
         const { Map } = await google.maps.importLibrary("maps");
         const { DirectionsService } = await google.maps.importLibrary("routes");
         const { DirectionsRenderer } = await google.maps.importLibrary("routes");
-        var directionsService = new DirectionsService();
-        var directionsRenderer = new DirectionsRenderer();
-        var uncc = new google.maps.LatLng(35.30715560913086, -80.73516082763672);
-        var mapOptions = {
-            zoom:10,
-            center: uncc
+        let directionsService = new DirectionsService();
+        let directionsRenderer = new DirectionsRenderer();
+        var current;
+        if (position == null) {
+            current = new google.maps.LatLng(35.30715560913086, -80.73516082763672);
+        } else {
+            current = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         }
-        var map = new Map(document.getElementById('google-map-container'), mapOptions);
+        let mapOptions = {
+            zoom:10,
+            center: current
+        }
+        map = new Map(document.getElementById('google-map-container'), mapOptions);
+
+        const onChangeHandler = function () {
+            calculateRoute(directionsService, directionsRenderer, position);
+        }
+
+        document.getElementById("class-selector").addEventListener("change", onChangeHandler);
+        document.getElementById("travel-mode-selector").addEventListener("change", onChangeHandler);
+
         directionsRenderer.setMap(map);
     }
 
-    initMap();
+    function staticLocationInit() {
+        console.log("Geolocation is not active in browser");
+        geoLocationInit(null);
+    }
+
+    function initMap() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(geoLocationInit, staticLocationInit);
+            return;
+        }
+        geoLocationInit(null);
+    }
+    
+    window.onload = initMap;
+
 </script>
 
 {% include "footer.html" %}

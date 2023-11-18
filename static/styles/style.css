@@ -188,11 +188,10 @@ body {
 }
 
 #google-map-container {
-    margin: 2rem auto 0;
+    margin: 1rem auto;
     position: relative;
     overflow: hidden;
-    min-height: 400px;
-    height: 60%;
+    height: 400px;
     width: 90%;
 }
 .route-selection-container {
@@ -222,4 +221,14 @@ body {
     display: block;
     height: 2rem;
     font-size: 20px;
+}
+
+#hidden-lot-select {
+    visibility: hidden;
+}
+
+.calculation-container {
+    margin: 1rem 0 0;
+    width: 50%;
+    display: inline-block;
 }

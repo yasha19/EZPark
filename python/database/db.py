@@ -22,7 +22,7 @@ class Database:
         self.connection.commit()
 
     def get_all_parking_decks(self):
-        self.cursor.execute("SELECT * FROM parking")
+        self.cursor.execute("SELECT * FROM parkingLocations")
         return self.cursor.fetchall()
     
     def get_profile_by_id(self, user_id: str):

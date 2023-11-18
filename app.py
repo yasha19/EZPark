@@ -11,7 +11,7 @@ from urllib.parse import parse_qs
 app = Flask(__name__)
 app.secret_key = 'uCraR5MZB/AvVo3Q24cBM/fZo5Kv/hV2HW9y0b3puClB25h0lbjBP6vYsHzz1hVY'
 HOST, PORT = 'localhost', 8080
-global userId, profile, buildings, favorites, classes, alerts, db
+global userId, profile, buildings, parkingDecks, favorites, classes, alerts, db
 userId = None
 profile = None
 favorites = None
@@ -19,6 +19,7 @@ classes = None
 alerts = None
 db = Database()
 buildings = db.get_all_buildings()
+parkingDecks = db.get_all_parking_decks()
 
 @app.route('/')
 def index_page():
@@ -91,19 +92,18 @@ def home_with_credentials_page():
         userId = userid
         session['user_id'] = userid
         session['g_csrf_token'] = token
-        
-        # Email for student account to be used in all other calls
-        email = decoded_token['email']
-        
-        # Student account name
-        FName = decoded_token['given_name']
-        LName = decoded_token['family_name']
-        
+
         # Get profile ID, insert new profile if userId doesn't exist
-        print("Retrieving user profile")
-        profile = db.get_profile_by_id(str(userId))
-        if profile == None:
-            db.insert_new_profile(str(userId), FName, LName, email)
+        profile = db.get_profile_by_id(userId)
+        if profile == None or len(profile) == 0:
+            # Email for student account to be used in all other calls
+            email = decoded_token['email']
+            
+            # Student account name
+            FName = decoded_token['given_name']
+            LName = decoded_token['family_name']
+            
+            db.insert_new_profile(userId, FName, LName, email)
 
         home_page = make_response(redirect(url_for('home_page')))
         home_page.set_cookie('g_csrf_token', token)
@@ -114,26 +114,32 @@ def home_with_credentials_page():
     
 @app.route('/map')
 def map_page():
-    global userId, favorites, addresses
+    global userId, parkingDecks, classes
     if isValidSession(userId):
-        classes = []
-        courses = db.get_all_classes_by_user(userId)
-        for class_ in courses:
+        courses = []
+        lots = []
+        classes = db.get_all_classes_by_user(userId)
+        for class_ in classes:
             for building in buildings:
                 if class_[1] == building[1]:
                     address = f'{building[2]}, {building[3]}, {building[4]} {building[5]}'
                     newClass = class_ + (address,)
-                    classes.append(newClass)
-        print(classes)
+                    courses.append(newClass)
 
-        return render_template('interactive_map.html', classData=classes, backDisplay=True, aboutDisplay=False)
+        for lot in parkingDecks:
+            lotAddress = f'{lot[2]}, {lot[3]}, {lot[4]} {lot[5]}'
+            newLot = (lot[1],) + (lotAddress,) + (lot[7],)
+            lots.append(newLot)
+        print(lots)
+
+        return render_template('interactive_map.html', classData=courses, parkingData=lots, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
     
 @app.route('/classes')
 def classes_page():
     global userId, classes
     if isValidSession(userId):
-        classes = []
+        classes= []
         classes = db.get_all_classes_by_user(userId)
         return render_template('classes.html', classData=classes, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
