@@ -1,0 +1,42 @@
+
+.favorites-header {
+    margin: 10px;
+}
+
+.favorites-container {
+    width: 75%;
+    margin: 0 auto;
+    background-color: #1C732F;
+    border-radius: 20px;
+}
+
+#favorites-list {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#favorites-list li {
+    list-style-type: none;
+}
+
+.favorites-list {
+    color: white;
+    padding: 15px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.favorites-btn {
+    margin-left: auto;
+}
+
+.add-favorites-button-container {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.add-favorites-button {
+    justify-content: center;
+}

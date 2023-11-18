@@ -11,6 +11,7 @@
 .label-header {
     color: #C9E03C;
     text-shadow: black;
+    margin-left: 0;
 }
 
 .course-container {
