@@ -22,6 +22,9 @@
 <div class="add-favorites-button-container">
     <button class="add-favorites-button" onclick="window.location.href='/add-favorites'">Add Favorites</button>
 </div>
+
+{% include "footer.html" %}
+
 <script>
     function removeFavorite(location, capacity) {
 
@@ -36,8 +39,10 @@
             }
         });
     }
-</script>
 
-{% include "footer.html" %}
+    function goHome() {
+        window.location.href="/home";
+    }
+</script>
 
 {% endblock %}

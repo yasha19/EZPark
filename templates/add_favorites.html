@@ -22,6 +22,9 @@
 <div class="submit-favorite">
     <button onclick="addFavorite()">Add Favorite</button>
 </div>
+
+{% include "footer.html" %}
+
 <script>
     function addFavorite() {
         var location_capacity=document.getElementById("location-list").value;
@@ -39,7 +42,10 @@
             }
         });
     }
+    
+    function goHome() {
+        window.location.href="/favorites";
+    }
 </script>
-{% include "footer.html" %}
 
 {% endblock %}

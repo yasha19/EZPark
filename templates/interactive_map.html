@@ -76,7 +76,7 @@
         if (courseLocation && mode) {
             for (var i = 0; i < lotLocations.length; i++) {
                 let selectValue = lotLocations[i].value;
-                 if (position == null || mode == "DRIVING") {
+                 if (mode == "DRIVING") {
                     orig = {
                         query: selectValue
                     }
@@ -169,6 +169,9 @@
     
     window.onload = initMap;
 
+    function goHome() {
+        window.location.href="/home";
+    }
 </script>
 
 {% include "footer.html" %}
