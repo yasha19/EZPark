@@ -11,9 +11,9 @@ class Database:
         )
         self.cursor = self.connection.cursor()
 
-    def insert_new_favorite(self, student_id: str, parking_name:str) -> None:
+    def insert_new_favorite(self, student_id: str, parking_name: str, capacity: int) -> None:
         self.cursor.execute(
-            "INSERT INTO favorites (favoritesID, fprofileID, parkingName) VALUES (%s, %s, %s)", (None, student_id, parking_name))
+            "INSERT INTO favorites (fprofileID, parkingName, capacity) VALUES (%s, %s, %s)", (student_id, parking_name, capacity))
         self.connection.commit()
 
     def insert_new_class(self, student_id: str, course_name: str, building_name: str) -> None:
@@ -38,9 +38,16 @@ class Database:
     def update_profile(self, profile):
         self.cursor.execute("UPDATE profile SET rec = %s, comType = %s WHERE userID = %s", (profile.rec, profile.comType, profile.userId))
         return self.cursor.fetchall()
-
+    
     def get_all_classes_by_user(self, user_id: str):
         self.cursor.execute("SELECT * FROM classes WHERE cProfileID= %s", (user_id,))
+        return self.cursor.fetchall()
+    
+    def remove_favorite(self, student_id: str, location):
+        print(location)
+        self.cursor.execute(
+            "DELETE FROM favprites WHERE fprofileID = %s  AND parklocation", (student_id, location))
+        self.connection.commit()
         return self.cursor.fetchall()
 
     def get_all_favorites_by_user(self, user_id: str):
@@ -55,4 +62,18 @@ class Database:
     
     def get_all_buildings(self):
         self.cursor.execute("SELECT * FROM buildingNames")
+        return self.cursor.fetchall()
+    
+    def delete_class(self, student_id: str, course_name: str, building_name: str) -> None:
+        print(student_id)
+        self.cursor.execute(
+            "DELETE FROM classes WHERE courseName = %s AND buildingName = %s AND cProfileID = %s", (course_name, building_name, student_id))
+        self.connection.commit()
+        return self.cursor.fetchall()
+    
+    def delete_favorite(self, student_id: str, parking_name: str, capacity: int) -> None:
+        print(student_id)
+        self.cursor.execute(
+            "DELETE FROM favorites WHERE parkingName = %s AND capacity = %s AND fprofileID = %s", (parking_name, capacity, student_id))
+        self.connection.commit()
         return self.cursor.fetchall()

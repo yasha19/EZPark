@@ -1,1 +1,43 @@
 
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% include "header.html" %}
+
+<div class="favorites-header">
+    <h1 class="header">
+        Favorites
+    </h1>
+</div>
+<div class="favorites-container">
+    <ul id="favorites-list">
+        {% for location in favData %}
+            <li class="favorites-list">
+                Location: {{ location[1] }}, Capacity: {{ location[2] }}% <button class="delete-btn" onclick='var location = "{{ location[1] }}";var capacity="{{ location[2] }}";removeFavorite(location,capacity);'>Remove</button><script></script>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<div class="add-favorites-button-container">
+    <button class="add-favorites-button" onclick="window.location.href='/add-favorites'">Add Favorites</button>
+</div>
+<script>
+    function removeFavorite(location, capacity) {
+
+        $.ajax({
+            type: "POST",
+            url: "/favorites",
+            data: { "location": location, "capacity": capacity }, 
+            contentType: 'application/json;charset=UTF-8',
+            dataType: 'json',
+            success: function(data) {
+                console.log('successfully posted data! response body: ' + data);
+            }
+        });
+    }
+</script>
+
+{% include "footer.html" %}
+
+{% endblock %}
