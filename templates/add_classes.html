@@ -21,15 +21,16 @@
     </h2>
     <select id="label-list">
         {% for building in buildingData %}
-        <option class="building-location" value="{{ building[1] }}">{{ building[1] }}
-
-        </option>
+        <option class="building-location" value="{{ building[1] }}">{{ building[1] }}</option>
         {% endfor %}
     </select>
     <div class="submit-class">
         <button onclick="addClass()">Add Class</button>
     </div>
 </div>
+
+{% include "footer.html" %}
+
 <script>
     function addClass() {
         var course=document.getElementById("course-text").value;
@@ -45,8 +46,10 @@
             }
         });
     }
+    
+    function goHome() {
+        window.location.href="/classes";
+    }
 </script>
-
-{% include "footer.html" %}
 
 {% endblock %}

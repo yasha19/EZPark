@@ -21,6 +21,9 @@
 <div class="add-class-button-container">
     <button class="add-class-button" onclick="window.location.href='/add-classes'">Add Class</button>
 </div>
+
+{% include "footer.html" %}
+
 <script>
     function removeClass(course, location) {
 
@@ -36,8 +39,9 @@
             }
         });
     }
+    function goHome() {
+        window.location.href="/home";
+    }
 </script>
-
-{% include "footer.html" %}
 
 {% endblock %}

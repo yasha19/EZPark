@@ -114,7 +114,7 @@ def home_with_credentials_page():
     
 @app.route('/map')
 def map_page():
-    global userId, parkingDecks, classes
+    global userId, parking_decks, classes
     if isValidSession(userId):
         courses = []
         lots = []
@@ -126,7 +126,7 @@ def map_page():
                     newClass = class_ + (address,)
                     courses.append(newClass)
 
-        for lot in parkingDecks:
+        for lot in parking_decks:
             lotAddress = f'{lot[2]}, {lot[3]}, {lot[4]} {lot[5]}'
             newLot = (lot[1],) + (lotAddress,) + (lot[7],)
             lots.append(newLot)
