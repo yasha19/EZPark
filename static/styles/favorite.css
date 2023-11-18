@@ -1,56 +1,42 @@
-/* Style for the header section containing the Favorites title and plus button */
-.favorites-header {
+
+.favorite-header {
+    margin: 10px;
+}
+
+.favorite-container {
+    width: 75%;
+    margin: 0 auto;
+    background-color: #1C732F;
+    border-radius: 20px;
+}
+
+.favorite-list {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.favorite-list li {
+    list-style-type: none;
+}
+
+.favorite-list {
+    color: white;
+    padding: 15px 0;
     display: flex;
-    justify-content: space-between; /* Aligns items on opposite ends */
-    align-items: center; /* Centers items vertically */
-    padding: 10px 20px; /* Padding around the header */
-    background-color: #1C732F; /* Background color */
-    border-radius: 20px; /* Rounded corners */
-    margin: 10px; /* Margin around the header */
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* Style for the plus button to add new favorites */
-.add-favorite-btn {
-    background-color: #377BB5; /* Button background color */
-    border: none; /* No border */
-    color: white; /* Text color */
-    padding: 10px 15px; /* Padding inside the button */
-    border-radius: 50%; /* Circular shape */
-    cursor: pointer; /* Cursor changes to pointer on hover */
-    font-size: 20px; /* Size of the plus icon */
+.favorite-btn {
+    margin-left: auto;
 }
 
-/* Style for the list of favorites */
-.favorites-list {
-    list-style-type: none; /* Removes default list styling */
-    padding: 0; /* Removes default padding */
-    margin: 0; /* Removes default margin */
+.add-favorite-button-container {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
 }
 
-/* Style for each favorite item in the list */
-.favorite-item {
-    background-color: #2a5233; /* Background color for each item */
-    margin: 10px 0; /* Margin between items */
-    padding: 10px 20px; /* Padding inside each item */
-    border-radius: 10px; /* Rounded corners for each item */
-    display: flex; /* Flex display to align text and button */
-    justify-content: space-between; /* Space between text and button */
-    align-items: center; /* Align items vertically */
-    color: white; /* Text color */
-}
-
-/* Style for the delete button in each favorite item */
-.delete-favorite-btn {
-    background-color: #a94442; /* Button background color */
-    border: none; /* No border */
-    color: white; /* Text color */
-    padding: 5px 10px; /* Padding inside the button */
-    border-radius: 50%; /* Circular shape */
-    cursor: pointer; /* Cursor changes to pointer on hover */
-}
-
-/* Adjustments for icon size inside buttons */
-.add-favorite-btn i,
-.delete-favorite-btn i {
-    font-size: 20px; /* Size of the icons */
+.add-favorite-button {
+    justify-content: center;
 }

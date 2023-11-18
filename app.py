@@ -177,10 +177,9 @@ def favorites_page():
             data = request.data.decode('utf-8')
             data = parse_qs(data)
             favName = data['favorite']
-            location = data['location']
-            db.remove_favorite(userId, favName[0], location[0])
+            db.remove_favorite(userId, favName[0])
             favorites = db.get_all_classes_by_user(userId)
-            return redirect(url_for('classes_page'))
+            print(favorites)
         return render_template('favorites.html', favData=favorites, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page')) 
 
