@@ -39,12 +39,15 @@ class Database:
         self.cursor.execute("UPDATE profile SET rec = %s, comType = %s WHERE userID = %s", (profile.rec, profile.comType, profile.userId))
         return self.cursor.fetchall()
     
-    def remove_favorite(self, user_id, location):
-        print(location)
-        self.cursor.execute("DELETE FROM favorites WHERE fprofileID = ? AND parkingName = ?", (user_id, location))
-    
     def get_all_classes_by_user(self, user_id: str):
         self.cursor.execute("SELECT * FROM classes WHERE cProfileID= %s", (user_id,))
+        return self.cursor.fetchall()
+    
+    def remove_favorite(self, student_id: str, location):
+        print(location)
+        self.cursor.execute(
+            "DELETE FROM favprites WHERE fprofileID = %s  AND parklocation", (student_id, location))
+        self.connection.commit()
         return self.cursor.fetchall()
 
     def get_all_favorites_by_user(self, user_id: str):

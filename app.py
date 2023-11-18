@@ -164,43 +164,24 @@ def add_classes_page():
             return render_template('add_classes.html', buildingData=buildings, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
-@app.route('/favorites')
+@app.route('/favorites', methods=['GET','POST'])
 def favorites_page():
     print("favorites_page")
     global userId, favorites
     if isValidSession(userId):
+        if request.method == 'GET':
+            favorites = []
+        else:
+            data = request.data.decode('utf-8')
+            data = parse_qs(data)
+            favName = data['favorite']
+            location = data['location']
+            db.delete_favorite(userId, favName[0])
+            favorites = db.get_all_classes_by_user(userId)
+    
         favorites = db.get_all_favorites_by_user(userId)
         return render_template('favorites.html', favData=favorites, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page')) 
-
-@app.route('/favorites', methods=['POST'])
-def favorites_pages():
-    global userId
-    if isValidSession(userId):
-        data = request.data.decode('utf-8')
-        data = parse_qs(data)
-        favName = data['favoriteName']
-        
-        print(favName[0])
-        db.remove_favorite(userId, favName)
-
-        return redirect(url_for('favorites_page'))
-    return redirect(url_for('login_page')) 
-
-@app.route('/favorites', methods=['POST'])
-def favorites_pages():
-    global userId
-    if isValidSession(userId):
-        data = request.data.decode('utf-8')
-        data = parse_qs(data)
-        favName = data['favorite']
-        
-        print(favName[0])
-        db.remove_favorite(userId, favName)
-
-        return redirect(url_for('favorites_page'))
-    return redirect(url_for('login_page'))
-
 
 @app.route('/add-favorites', methods=['GET','POST'])
 def add_favorites_page():
