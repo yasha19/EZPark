@@ -32,9 +32,11 @@
 }
 
 .add-favorites-button-container {
-    margin-inline: auto;
+    margin-inline-start: auto;
+    margin-inline-end: auto;
 }
 
 .add-favorites-button {
-    margin-inline: auto;
+    margin-inline-start: auto;
+    margin-inline-end: auto;
 }
