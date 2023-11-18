@@ -20,14 +20,19 @@
 
 .location-container {
     margin-bottom: 30px;
+    margin-inline: 40px;
 }
 
 #label-list {
-    width: 100%;
+    width: 70%;
     margin-block: 20px;
     font-size: large;
+    margin-inline: 40px;
+    
 }
 
 .submit-favorite button {
     margin-bottom: 20px;
+    margin-inline: 40px;
+    
 }
