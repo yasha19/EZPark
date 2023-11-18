@@ -15,12 +15,11 @@
 
 .favorite-container {
     width: 75%;
-    margin: 0 auto;
+    margin-inline: 40px;
 }
 
 .location-container {
     margin-bottom: 30px;
-    margin-inline: 40px;
 }
 
 #label-list {
