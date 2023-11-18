@@ -1,4 +1,4 @@
-.add-favorites-header {
+.add-favorite-parking-header {
     margin: 10px;
 }
 
@@ -13,7 +13,7 @@
     text-shadow: black;
 }
 
-.add-favorites-container {
+.favorite-container {
     width: 75%;
     margin: 0 auto;
 }
@@ -23,10 +23,10 @@
     margin: 0 auto;
 }
 
-.label-list {
+#label-list {
     width: 100%;
 }
 
-.submit-favorite {
+.submit-favorite button {
     margin-top: 2rem;
 }

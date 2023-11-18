@@ -1,49 +1,49 @@
-{% extends "layout.html" %}
+    {% extends "layout.html" %}
 
-{% block content %}
+    {% block content %}
 
-{% include "header.html" %}
+    {% include "header.html" %}
 
-
-<div class="add-favorites-header">
-    <h1 class="header">
-        Add Favorite Parking
-    </h1>
-</div>
-<div class="parking-container">
-    <h2 class="label-header">
-        Parking Location
-    </h2>
-    <input type="text" name="favorite-text" id="favorite"/>
-</div>
-    <select id="favorite-list">
-        {% for location in parkingLocation %}
-        <option class="parkingLocation" value="{{ location[1] }}">{{ location[1] }}
-
-        </option>
-        {% endfor %}
-    </select>
-    <div class="submit-favorite">
-        <button onclick="addFavorite()">Add Favorite</button>
+    <div class="add-favorite-parking-header">
+        <h1 class="header">
+            Add Favorite Parking
+        </h1>
     </div>
-</div>
-<script>
-    function addFavorite(favoriteName) {
-    
-    console.log("Add favorites with Name:", favoriteName);
-    $.ajax({
-            type: "POST",
-            url: "/favorites",
-            data: { "favorite": favoriteName  }, 
-            contentType: 'application/json;charset=UTF-8',
-            dataType: 'json',
-            success: function(data) {
-                console.log('successfully posted data! response body: ' + data);
-            }
-        });
-    }
-</script>
+    <div class="parking-location-container">
+        <h2 class="label-header">
+            Parking Location
+        </h2>
+        <input type="text" name="course-text" id="course-text"/>
+    </div>
 
-{% include "footer.html" %}
+        <select id="label-list">
+            {% for building in buildingData %}
+            <option class="building-location" value="{{ building[1] }}">{{ building[1] }}
 
-{% endblock %}
+            </option>
+            {% endfor %}
+        </select>
+        <div class="submit-favorite">
+            <button onclick="addFavorite()">Add Class</button>
+        </div>
+    </div>
+    <script>
+        function addFavorite() {
+            var course=document.getElementById("favorite-text").value;
+            var location=document.getElementById("label-list").value;
+            $.ajax({
+                type: "POST",
+                url: "/add-favorites",
+                data: { "favorite": fav, "location": location }, 
+                contentType: 'application/json;charset=UTF-8',
+                dataType: 'json',
+                success: function(data) {
+                    console.log('successfully posted data! response body: ' + data);
+                }
+            });
+        }
+    </script>
+
+    {% include "footer.html" %}
+
+    {% endblock %}
