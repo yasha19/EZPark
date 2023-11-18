@@ -11,6 +11,7 @@
 .label-header {
     color: #C9E03C;
     text-shadow: black;
+    margin-inline: 40px;
 }
 
 .favorite-container {
@@ -23,9 +24,15 @@
 }
 
 #label-list {
-    width: 100%;
+    width: 70%;
+    margin-block: 20px;
+    font-size: large;
+    margin-inline: 40px;
+    
 }
 
 .submit-favorite button {
     margin-bottom: 20px;
+    margin-inline: 40px;
+    
 }

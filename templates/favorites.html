@@ -1,43 +1,43 @@
-{% extends "layout.html" %}
+    {% extends "layout.html" %}
 
-{% block content %}
+    {% block content %}
 
-{% include "header.html" %}
+    {% include "header.html" %}
 
-<div class="favorites-header">
-    <h1 class="header">
-        Favorites
-    </h1>
-</div>
-<div class="favorites-container">
-    <ul id="favorites-list">
-        {% for fav in favData %}
-            <li class="favorites">
-                Course Name: {{ fav[4] }}, Building: {{ fav[1] }} <button class="delete-btn" onclick='var fav = "{{ fav[4] }}";removeFavorite(fav);'>Remove</button><script></script>
-            </li>
-        {% endfor %}
-    </ul>
-</div>
-<div class="add-favorites-button-container">
-    <button class="add-favorites-button" onclick="window.location.href='/add-favorites'">Add favorites</button>
-</div>
-<script>
-    function removeFavorite(fav) {
+    <div class="favorites-header">
+        <h1 class="header">
+            Favorites
+        </h1>
+    </div>
+    <div class="favorites-container">
+        <ul id="favorites-list">
+            {% for fav in favData %}
+                <li class="favorites">
+                    Course Name: {{ fav[4] }}, Building: {{ fav[1] }} <button class="delete-btn" onclick='var fav = "{{ fav[4] }}";removeFavorite(fav);'>Remove</button><script></script>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="add-favorites-button-container">
+        <button class="add-favorites-button" onclick="window.location.href='/add-favorites'">Add favorites</button>
+    </div>
+    <script>
+        function removeFavorite(fav) {
 
-        console.log(fav)
-        $.ajax({
-            type: "POST",
-            url: "/favorites",
-            data: { "favorite": fav}, 
-            contentType: 'application/json;charset=UTF-8',
-            dataType: 'json',
-            success: function(data) {
-                console.log('successfully posted data! response body: ' + data);
-            }
-        });
-    }
-</script>
+            console.log(fav)
+            $.ajax({
+                type: "POST",
+                url: "/favorites",
+                data: { "favorite": fav}, 
+                contentType: 'application/json;charset=UTF-8',
+                dataType: 'json',
+                success: function(data) {
+                    console.log('successfully posted data! response body: ' + data);
+                }
+            });
+        }
+    </script>
 
-{% include "footer.html" %}
+    {% include "footer.html" %}
 
-{% endblock %}
+    {% endblock %}
