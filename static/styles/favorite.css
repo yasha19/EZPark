@@ -10,7 +10,7 @@
     border-radius: 20px;
 }
 
-.favorites-list {
+#favorites-list {
     padding-left: 20px;
     padding-right: 20px;
 }
@@ -19,7 +19,7 @@
     list-style-type: none;
 }
 
-#favorites-list {
+.favorites-list {
     color: white;
     padding: 15px 0;
     display: flex;
