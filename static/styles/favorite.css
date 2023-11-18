@@ -15,11 +15,11 @@
     padding-right: 20px;
 }
 
-.favorites-list li {
+#favorites-list li {
     list-style-type: none;
 }
 
-.favorites-list {
+#favorites-list {
     color: white;
     padding: 15px 0;
     display: flex;
@@ -37,4 +37,5 @@
 
 .add-favorites-button {
     margin-inline: auto;
+    margin: 20px;
 }

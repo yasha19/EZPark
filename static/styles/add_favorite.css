@@ -19,8 +19,7 @@
 }
 
 .location-container {
-    width: 75%;
-    margin: 0 auto;
+    margin-bottom: 30px;
 }
 
 #label-list {
@@ -28,5 +27,5 @@
 }
 
 .submit-favorite button {
-    margin-inline: auto;
+    margin-bottom: 20px;
 }
