@@ -24,6 +24,7 @@
 
 #label-list {
     width: 100%;
+    margin-block: 20px;
 }
 
 .submit-favorite button {
