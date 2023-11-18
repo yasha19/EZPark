@@ -1,5 +1,5 @@
 
-.AddFavorite-header {
+.add-favorites-header {
     margin: 10px;
 }
 
@@ -14,7 +14,7 @@
     text-shadow: black;
 }
 
-.addfavorite-container {
+.add-favorites-container {
     width: 75%;
     margin: 0 auto;
 }
@@ -24,10 +24,10 @@
     margin: 0 auto;
 }
 
-#label-list {
+.label-list {
     width: 100%;
 }
 
-.submit-addfavorite button {
+.submit-favorite {
     margin-top: 2rem;
 }
