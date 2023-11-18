@@ -27,16 +27,16 @@
     align-items: center;
 }
 
-.favorite-btn {
+.delete-btn {
     margin-left: auto;
 }
 
-.add-favorite-button-container {
+.add-favorites-button-container {
     text-align: center;
     margin-bottom: 20px;
     margin-top: 20px;
 }
 
-.add-favorite-button {
+.add-favorites-button {
     justify-content: center;
 }
