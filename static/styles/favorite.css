@@ -5,8 +5,8 @@
 
 .favorites-container {
     width: 75%;
-    margin: 0 auto;
-    background-color: greenyellow;
+    margin-inline: 100px;
+    background-color: darkgreen;
     border-radius: 20px;
 }
 
@@ -37,5 +37,4 @@
 
 .add-favorites-button {
     margin-inline: auto;
-    margin: 20px;
 }
