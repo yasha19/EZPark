@@ -1,0 +1,33 @@
+.classes-header {
+    margin: 10px;
+}
+
+.header {
+    color: #C9E03C;
+    text-align: center;
+    margin: 0;
+}
+
+.label-header {
+    color: #C9E03C;
+    text-shadow: black;
+    margin-left: 0;
+}
+
+.course-container {
+    width: 75%;
+    margin: 0 auto;
+}
+
+.location-container {
+    width: 75%;
+    margin: 0 auto;
+}
+
+#label-list {
+    width: 100%;
+}
+
+.submit-class button {
+    margin-top: 2rem;
+}

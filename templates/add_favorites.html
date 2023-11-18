@@ -4,12 +4,48 @@
 
 {% include "header.html" %}
 
-<div class="add-favs-container">
-    <select class="favs-list">
-        <option class="fav-item">West Deck</option>
-    </select>
+<div class="add-favorites-container">
+    <h1 class="add-favorites-header">
+        Add Favorite Parking
+    </h1>
+</div>
+<div class="add-location-container">
+    <h2 class="add-location-header">
+        Parking Location
+    </h2>
+</div>
+<select id="location-list">
+    {% for location in parkingData %}
+    <option class="parking-location" value="{{ location[1] }}-{{ location[6] }}%">{{ location[1] }} - {{ location[6] }}%</option>
+    {% endfor %}
+</select>
+<div class="submit-favorite">
+    <button onclick="addFavorite()">Add Favorite</button>
 </div>
 
 {% include "footer.html" %}
+
+<script>
+    function addFavorite() {
+        var location_capacity=document.getElementById("location-list").value;
+        var split = location_capacity.split('-');
+        var location = split[0];
+        var capacity = parseInt(split[1]);
+        $.ajax({
+            type: "POST",
+            url: "/add-favorites",
+            data: { "location": location, "capacity": capacity }, 
+            contentType: 'application/json;charset=UTF-8',
+            dataType: 'json',
+            success: function(data) {
+                console.log('successfully posted data! response body: ' + data);
+            }
+        });
+    }
+    
+    function goHome() {
+        window.location.href="/favorites";
+    }
+</script>
 
 {% endblock %}

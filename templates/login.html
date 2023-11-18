@@ -6,30 +6,24 @@
 
 <div class="login-header-div">
     <h2 class="login-header">Login using your UNCC credentials</h2>
-    
-    <div id="g_id_onload"
-        data-client_id="1031925357556-g9tr3am18n1vg8ce88svenjgj82onrvt"
-        data-context="signin"
-        data-ux_mode="popup"
-        data-callback="authentication_init"
-        data-auto_prompt="false">
-    </div>
-
-    <div class="g_id_signin"
-        data-type="standard"
-        data-shape="rectangular"
-        data-theme="filled_blue"
-        data-text="signin_with"
-        data-size="large"
-        data-logo_alignment="left"
-        data-width="300">
-    </div>
+    <div id="google-signin-btn"></div>
 </div>
 
 <script>
-    function authentication_init() {
-        window.location.href = "/home";
-    }
+    window.onload = function () {
+        google.accounts.id.initialize({
+            client_id: '1031925357556-g9tr3am18n1vg8ce88svenjgj82onrvt',
+            hd: "uncc.edu",
+            ux_mode: "redirect",
+            login_uri: "https://localhost:8080/home"
+        });
+        const parent = document.getElementById('google-signin-btn');
+        google.accounts.id.renderButton(parent, {
+            theme: "filled_blue",
+            size: "large",
+            width: "300"
+        });
+    };
 </script>
 
 {% include "footer.html" %}

@@ -1,0 +1,25 @@
+.add-favorites-header {
+    margin: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #C9E03C;
+}
+
+.add-location-header {
+    margin: 10px;
+    text-align: center;
+    color: #C9E03C;
+}
+
+#location-list {
+    width: 50%;
+    text-align: center;
+    margin: 0 25%;
+    margin-top: 20px;
+    padding: 5px;
+}
+
+.submit-favorite {
+    text-align: center;
+    margin-top: 10px;
+}

@@ -4,6 +4,44 @@
 
 {% include "header.html" %}
 
+<div class="classes-header">
+    <h1 class="header">
+        Classes
+    </h1>
+</div>
+<div class="class-container">
+    <ul id="class-list">
+        {% for course in classData %}
+            <li class="course-list">
+                Course Name: {{ course[4] }}, Building: {{ course[1] }} <button class="delete-btn" onclick='var course = "{{ course[4] }}";var location="{{ course[1] }}";removeClass(course,location);'>Remove</button><script></script>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<div class="add-class-button-container">
+    <button class="add-class-button" onclick="window.location.href='/add-classes'">Add Class</button>
+</div>
+
 {% include "footer.html" %}
+
+<script>
+    function removeClass(course, location) {
+
+        console.log(course)
+        $.ajax({
+            type: "POST",
+            url: "/classes",
+            data: { "course": course , "location": location}, 
+            contentType: 'application/json;charset=UTF-8',
+            dataType: 'json',
+            success: function(data) {
+                console.log('successfully posted data! response body: ' + data);
+            }
+        });
+    }
+    function goHome() {
+        window.location.href="/home";
+    }
+</script>
 
 {% endblock %}

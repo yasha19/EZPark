@@ -13,10 +13,9 @@
 </footer>
 <script>
     function signOut() {
-        window.location.href="/login";
-    }
-    function goHome() {
-        window.location.href="/home";
+        google.accounts.id.disableAutoSelect();
+        document.cookie = "g_csrf_token=; Max-Age=-99999999;";
+        window.location.href="/logout";
     }
     function goAbout() {
         window.location.href="/about";
