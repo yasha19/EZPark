@@ -1,25 +1,25 @@
 
-.favorite-header {
+.favorites-header {
     margin: 10px;
 }
 
-.favorite-container {
+.favorites-container {
     width: 75%;
     margin: 0 auto;
     background-color: #1C732F;
     border-radius: 20px;
 }
 
-.favorite-list {
+.favorites-list {
     padding-left: 20px;
     padding-right: 20px;
 }
 
-.favorite-list li {
+.favorites-list li {
     list-style-type: none;
 }
 
-.favorite-list {
+.favorites-list {
     color: white;
     padding: 15px 0;
     display: flex;

@@ -4,15 +4,15 @@
 
 {% include "header.html" %}
 
-<div class="favorite">
+<div class="favorites">
     <h1 class="header">
-        Favorite
+        Favorites
     </h1>
 </div>
-<div class="favorite-container">
-    <ul id="favorite-list">
+<div class="favorites-container">
+    <ul id="favorites-list">
         {% for fav in favData %}
-            <li class="favorite">
+            <li class="favorites">
                 Course Name: {{ fav[4] }}, Building: {{ fav[1] }} <button class="delete-btn" onclick='var fav = "{{ fav[4] }}";removeFavorite(fav);'>Remove</button><script></script>
             </li>
         {% endfor %}
