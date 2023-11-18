@@ -171,15 +171,16 @@ def favorites_page():
     if isValidSession(userId):
         if request.method == 'GET':
             favorites = []
+            favorites = db.get_all_classes_by_user(userId)
+            print(favorites)
         else:
             data = request.data.decode('utf-8')
             data = parse_qs(data)
             favName = data['favorite']
             location = data['location']
-            db.delete_favorite(userId, favName[0])
+            db.remove_favorite(userId, favName[0], location[0])
             favorites = db.get_all_classes_by_user(userId)
-    
-        favorites = db.get_all_favorites_by_user(userId)
+            return redirect(url_for('classes_page'))
         return render_template('favorites.html', favData=favorites, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page')) 
 
