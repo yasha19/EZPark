@@ -1,20 +1,40 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    margin: 0;
-    padding: 0;
-}
 
 .favorites-header {
-    background-color: #4CAF50;
+    margin: 10px;
+}
+
+.favorites-container {
+    width: 75%;
+    margin-inline: 100px;
+    background-color: darkgreen;
+    border-radius: 20px;
+}
+
+.favorites-list {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#favorites-list li {
+    list-style-type: none;
+}
+
+#favorites-list {
     color: white;
-    padding: 10px 20px;
+    padding: 15px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.favorites-header h1 {
-    margin: 0;
-    font-size: 1.5em;
+.delete-btn {
+    margin-left: auto;
+}
+
+.add-favorites-button-container {
+    margin-inline: auto;
+}
+
+.add-favorites-button {
+    margin-inline: auto;
 }

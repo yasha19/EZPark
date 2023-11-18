@@ -164,44 +164,37 @@ def add_classes_page():
             return render_template('add_classes.html', buildingData=buildings, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
-@app.route('/favorites')
+@app.route('/favorites', methods=['GET','POST'])
 def favorites_page():
     print("favorites_page")
     global userId, favorites
     if isValidSession(userId):
-        user_id_int = int(userId)
-        favorites = db.get_all_favorites_by_user(user_id_int)
+        if request.method == 'GET':
+            favorites = []
+            favorites = db.get_all_classes_by_user(userId)
+            print(favorites)
+        else:
+            data = request.data.decode('utf-8')
+            data = parse_qs(data)
+            favName = data['favorite']
+            db.remove_favorite(userId, favName[0])
+            favorites = db.get_all_classes_by_user(userId)
+            print(favorites)
         return render_template('favorites.html', favData=favorites, backDisplay=True, aboutDisplay=False)
-    return redirect(url_for('login_page')) 
-
-@app.route('/favorites', methods=['POST'])
-def favorites_pages():
-    global userId
-    if isValidSession(userId):
-        data = request.data.decode('utf-8')
-        data = parse_qs(data)
-        favName = data['favoriteName']
-        
-        print(favName[0])
-        db.remove_favorite(userId, favName)
-
-        return redirect(url_for('favorites_page'))
     return redirect(url_for('login_page')) 
 
 @app.route('/add-favorites', methods=['GET','POST'])
 def add_favorites_page():
     print("add_favorites_page")
-    global userId
+    global userId, parking_decks
     if isValidSession(userId):
         if request.method == 'GET':
             return render_template('add_favorites.html', backDisplay=True, aboutDisplay=False, parkingLocations=parking_decks)
         else:
             data = request.data.decode('utf-8')
             data = parse_qs(data)
-            favName = data['favoriteName']
-            
-            print(favName[0])
-            db.insert_new_favorite(userId, favName)
+            favName = data['favorite']
+            db.insert_new_favorite(userId, favName[0])
 
             return redirect(url_for('favorites_page'))
     return redirect(url_for('login_page'))
@@ -246,4 +239,3 @@ def isValidSession(user_id):
 if __name__ == '__main__':
     print('starting app...')
     app.run(ssl_context='adhoc', debug=True, host=HOST, port=PORT)
-    
