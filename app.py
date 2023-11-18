@@ -129,14 +129,23 @@ def map_page():
         return render_template('interactive_map.html', classData=classes, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
     
-@app.route('/classes')
+@app.route('/classes', methods=['GET', 'POST'])
 def classes_page():
     global userId, classes
     if isValidSession(userId):
-        classes = []
-        classes = db.get_all_classes_by_user((userId,))
-        print(classes)
-        return render_template('classes.html', classData=classes, backDisplay=True, aboutDisplay=False)
+        if request.method == 'GET':
+            classes = []
+            classes = db.get_all_classes_by_user(userId)
+            print(classes)
+        else:
+            data = request.data.decode('utf-8')
+            data = parse_qs(data)
+            course = data['course']
+            location = data['location']
+            db.delete_class(userId, course[0], location[0])
+            classes = db.get_all_classes_by_user(userId)
+            return redirect(url_for('classes_page'))
+        return render_template('classes.html', classData=classes, buildingData=buildings, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
 @app.route('/add-classes', methods=['GET', 'POST'])

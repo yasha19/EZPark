@@ -56,3 +56,10 @@ class Database:
     def get_all_buildings(self):
         self.cursor.execute("SELECT * FROM buildingNames")
         return self.cursor.fetchall()
+    
+    def delete_class(self, student_id: str, course_name: str, building_name: str) -> None:
+        print(student_id)
+        self.cursor.execute(
+            "DELETE FROM classes WHERE courseName = %s AND buildingName = %s AND cProfileID = %s", (course_name, building_name, student_id))
+        self.connection.commit()
+        return self.cursor.fetchall()

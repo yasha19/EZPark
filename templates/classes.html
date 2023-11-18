@@ -10,17 +10,33 @@
     </h1>
 </div>
 <div class="class-container">
-    <label for="class-display">Class Display</label>
-    <ul id="class-selector">
+    <ul id="class-list">
         {% for course in classData %}
-            <li class="course-list" value="{{ course[1] }}">
-                {% for value in course %}
-                    <span>{{ value }}</span>
-                {% endfor %}
+            <li class="course-list">
+                Course Name: {{ course[4] }}, Building: {{ course[1] }} <button class="delete-btn" onclick='var course = "{{ course[4] }}";var location="{{ course[1] }}";removeClass(course,location);'>Remove</button><script></script>
             </li>
         {% endfor %}
     </ul>
 </div>
+<div class="add-class-button-container">
+    <button class="add-class-button" onclick="window.location.href='/add-classes'">Add Class</button>
+</div>
+<script>
+    function removeClass(course, location) {
+
+        console.log(course)
+        $.ajax({
+            type: "POST",
+            url: "/classes",
+            data: { "course": course , "location": location}, 
+            contentType: 'application/json;charset=UTF-8',
+            dataType: 'json',
+            success: function(data) {
+                console.log('successfully posted data! response body: ' + data);
+            }
+        });
+    }
+</script>
 
 {% include "footer.html" %}
 
