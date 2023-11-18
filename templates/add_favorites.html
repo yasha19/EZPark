@@ -14,12 +14,12 @@
     <h2 class="label-header">
         Parking Location
     </h2>
-    <input type="text" name="favorite-text" id="favorite"/>
-</div>
-    <select id="favorite-list">
-        {% for location in parkingLocation %}
-        <option class="parkingLocation" value="{{ location[1] }}">{{ location[1] }}
 
+    
+</div>
+    <select id="location-list">
+        {% for location in parkingData %}
+        <option class="parking-location" value="{{ location[1] }}-{{ location[6] }}%">{{ location[1] }} - {{ location[6] }}%
         </option>
         {% endfor %}
     </select>
@@ -28,20 +28,22 @@
     </div>
 </div>
 <script>
-    function addFavorite(favoriteName) {
-    
-    console.log("Add favorite with Name:", favoriteName);
-    $.ajax({
-            type: "POST",
-            url: "/favorites",
-            data: { "favorite": favoriteName  }, 
-            contentType: 'application/json;charset=UTF-8',
-            dataType: 'json',
-            success: function(data) {
-                console.log('successfully posted data! response body: ' + data);
-            }
-        });
-    }
+    function addFavorite() {
+        var location_capacity=document.getElementById("location-list").value;
+        var split = location_capacity.split('-');
+        var location = split[0];
+        var capacity = parseInt(split[1]);
+        $.ajax({
+                type: "POST",
+                url: "/add-favorites",
+                data: { "location": location, "capacity": capacity }, 
+                contentType: 'application/json;charset=UTF-8',
+                dataType: 'json',
+                success: function(data) {
+                    console.log('successfully posted data! response body: ' + data);
+                }
+            });
+        }
 </script>
 
 {% include "footer.html" %}

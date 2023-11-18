@@ -4,42 +4,37 @@
 
 {% include "header.html" %}
 
-<div class="favorites-header">
+<div class="classes-header">
     <h1 class="header">
         Favorites
     </h1>
-    <button onclick="location.href='/add-favorites'" class="add-favorite-btn">
-        <i class="fa-sharp fa-solid fa-plus"></i>
-    </button>
 </div>
-
-<ul class="favorites-list">
-    {% for fav in favData %}
-    <li class="favorite-item">
-        {{ fav.name }} 
-        <button onclick="removeFavorite('{{ fav.name }}')" class="delete-favorite-btn">
-            <i class="fa-sharp fa-solid fa-trash"></i>
-        </button>
-    </li>
-    {% endfor %}
-</ul>
-
+<div class="class-container">
+    <ul id="class-list">
+        {% for location in favData %}
+            <li class="course-list">
+                Location: {{ location[1] }}, Capacity: {{ location[2] }}% <button class="delete-btn" onclick='var location = "{{ location[1] }}";var capacity="{{ location[2] }}";removeFavorite(location,capacity);'>Remove</button><script></script>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<div class="add-class-button-container">
+    <button class="add-class-button" onclick="window.location.href='/add-favorites'">Add Favorites</button>
+</div>
 <script>
-function removeFavorite(favoriteName) {
+    function removeFavorite(location, capacity) {
 
-    console.log("Remove favorite with Name:", favoriteName);
-    $.ajax({
+        $.ajax({
             type: "POST",
             url: "/favorites",
-            data: { "favorite": favoriteName  }, 
+            data: { "location": location, "capacity": capacity }, 
             contentType: 'application/json;charset=UTF-8',
             dataType: 'json',
             success: function(data) {
                 console.log('successfully posted data! response body: ' + data);
             }
         });
-    
-}
+    }
 </script>
 
 {% include "footer.html" %}

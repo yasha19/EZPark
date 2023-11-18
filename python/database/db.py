@@ -11,9 +11,9 @@ class Database:
         )
         self.cursor = self.connection.cursor()
 
-    def insert_new_favorite(self, student_id: str, parking_name:str) -> None:
+    def insert_new_favorite(self, student_id: str, parking_name: str, capacity: int) -> None:
         self.cursor.execute(
-            "INSERT INTO favorites (favoritesID, fprofileID, parkingName) VALUES (%s, %s, %s)", (None, student_id, parking_name))
+            "INSERT INTO favorites (fprofileID, parkingName, capacity) VALUES (%s, %s, %s)", (student_id, parking_name, capacity))
         self.connection.commit()
 
     def insert_new_class(self, student_id: str, course_name: str, building_name: str) -> None:
@@ -61,5 +61,12 @@ class Database:
         print(student_id)
         self.cursor.execute(
             "DELETE FROM classes WHERE courseName = %s AND buildingName = %s AND cProfileID = %s", (course_name, building_name, student_id))
+        self.connection.commit()
+        return self.cursor.fetchall()
+    
+    def delete_favorite(self, student_id: str, parking_name: str, capacity: int) -> None:
+        print(student_id)
+        self.cursor.execute(
+            "DELETE FROM favorites WHERE parkingName = %s AND capacity = %s AND fprofileID = %s", (parking_name, capacity, student_id))
         self.connection.commit()
         return self.cursor.fetchall()
