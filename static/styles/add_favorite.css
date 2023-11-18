@@ -11,11 +11,12 @@
 .label-header {
     color: #C9E03C;
     text-shadow: black;
+    margin-inline: 40px;
 }
 
 .favorite-container {
     width: 75%;
-    margin-inline: 40px;
+    margin: 0 auto;
 }
 
 .location-container {
