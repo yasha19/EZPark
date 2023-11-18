@@ -14,34 +14,43 @@
                 Parking Location
             </h2>
         </div>
-
-            <select id="label-list">
-                {% for building in buildingData %}
-                <option class="building-location" value="{{ building[1] }}">{{ building[1] }}
-
-                </option>
-                {% endfor %}
-            </select>
-            <div class="submit-favorite">
-                <button onclick="addFavorite()">Add favorites</button>
-            </div>
-        </div>
-        <script>
-            function addFavorite() {
-                var course=document.getElementById("favorite-text").value;
-                var location=document.getElementById("label-list").value;
-                $.ajax({
-                    type: "POST",
-                    url: "/add-favorites",
-                    data: { "favorite": fav, "location": location }, 
-                    contentType: 'application/json;charset=UTF-8',
-                    dataType: 'json',
-                    success: function(data) {
-                        console.log('successfully posted data! response body: ' + data);
-                    }
-                });
-            }
-        </script>
+<div class="add-favorites-header">
+    <h1 class="header">
+        Add Favorite Parking
+    </h1>
+</div>
+<div class="parking-container">
+    <h2 class="label-header">
+        Parking Location
+    </h2>
+</div>
+    <select id="location-list">
+        {% for location in parkingData %}
+        <option class="parking-location" value="{{ location[1] }}-{{ location[6] }}%">{{ location[1] }} - {{ location[6] }}%
+        </option>
+        {% endfor %}
+    </select>
+    <div class="submit-favorite">
+        <button onclick="addFavorite()">Add Favorite</button>
+    </div>
+</div>
+<script>
+    function addFavorite() {
+        var location_capacity=document.getElementById("location-list").value;
+        var split = location_capacity.split('-');
+        var location = split[0];
+        var capacity = parseInt(split[1]);
+        $.ajax({
+                type: "POST",
+                url: "/add-favorites",
+                data: { "location": location, "capacity": capacity }, 
+                contentType: 'application/json;charset=UTF-8',
+                dataType: 'json',
+                success: function(data) {
+                    console.log('successfully posted data! response body: ' + data);
+                }
+            });
+        }
 
         {% include "footer.html" %}
 

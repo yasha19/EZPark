@@ -164,39 +164,38 @@ def add_classes_page():
             return render_template('add_classes.html', buildingData=buildings, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
-@app.route('/favorites', methods=['GET','POST'])
+@app.route('/favorites', methods=['GET', 'POST'])
 def favorites_page():
-    print("favorites_page")
     global userId, favorites
     if isValidSession(userId):
         if request.method == 'GET':
             favorites = []
-            favorites = db.get_all_classes_by_user(userId)
+            favorites = db.get_all_favorites_by_user(userId)
             print(favorites)
         else:
             data = request.data.decode('utf-8')
             data = parse_qs(data)
-            favName = data['favorite']
-            db.remove_favorite(userId, favName[0])
-            favorites = db.get_all_classes_by_user(userId)
-            print(favorites)
-        return render_template('favorites.html', favData=favorites, backDisplay=True, aboutDisplay=False)
-    return redirect(url_for('login_page')) 
+            location = data['location']
+            capacity = data['capacity']
+            db.delete_favorite(userId, location[0], capacity[0])
+            favorites = db.get_all_favorites_by_user(userId)
+            return redirect(url_for('favorites_page'))
+        return render_template('favorites.html', favData=favorites, parkingData=parking_decks, backDisplay=True, aboutDisplay=False)
+    return redirect(url_for('login_page'))
 
-@app.route('/add-favorites', methods=['GET','POST'])
+@app.route('/add-favorites', methods=['GET', 'POST'])
 def add_favorites_page():
-    print("add_favorites_page")
     global userId, parking_decks
     if isValidSession(userId):
         if request.method == 'GET':
-            return render_template('add_favorites.html', backDisplay=True, aboutDisplay=False, parkingLocations=parking_decks)
+            return render_template('add_favorites.html', parkingData=parking_decks, backDisplay=True, aboutDisplay=False)
         else:
             data = request.data.decode('utf-8')
             data = parse_qs(data)
-            favName = data['favorite']
-            db.insert_new_favorite(userId, favName[0])
-
-            return redirect(url_for('favorites_page'))
+            location = data['location']
+            capacity = data['capacity']
+            db.insert_new_favorite(userId, location[0], capacity[0])
+            return render_template('add_favorites.html', parkingData=parking_decks, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
     
 @app.route('/alerts')
