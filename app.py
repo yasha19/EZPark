@@ -164,7 +164,6 @@ def add_classes_page():
             return render_template('add_classes.html', buildingData=buildings, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
-
 @app.route('/favorites', methods=['GET', 'POST'])
 def favorites_page():
     global userId, favorites
@@ -183,7 +182,6 @@ def favorites_page():
             return redirect(url_for('favorites_page'))
         return render_template('favorites.html', favData=favorites, parkingData=parking_decks, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
-
 
 @app.route('/add-favorites', methods=['GET', 'POST'])
 def add_favorites_page():
@@ -240,4 +238,3 @@ def isValidSession(user_id):
 if __name__ == '__main__':
     print('starting app...')
     app.run(ssl_context='adhoc', debug=True, host=HOST, port=PORT)
-    
