@@ -1,38 +1,26 @@
-        {% extends "layout.html" %}
+{% extends "layout.html" %}
 
-        {% block content %}
+{% block content %}
 
-        {% include "header.html" %}
+{% include "header.html" %}
 
-        <div class="add-favorite-parking-header">
-            <h1 class="header">
-                Add Favorite Parking
-            </h1>
-        </div>
-        <div class="parking-location-container">
-            <h2 class="label-header">
-                Parking Location
-            </h2>
-        </div>
-<div class="add-favorites-header">
-    <h1 class="header">
+<div class="add-favorites-container">
+    <h1 class="add-favorites-header">
         Add Favorite Parking
     </h1>
 </div>
-<div class="parking-container">
-    <h2 class="label-header">
+<div class="add-location-container">
+    <h2 class="add-location-header">
         Parking Location
     </h2>
 </div>
-    <select id="location-list">
-        {% for location in parkingData %}
-        <option class="parking-location" value="{{ location[1] }}-{{ location[6] }}%">{{ location[1] }} - {{ location[6] }}%
-        </option>
-        {% endfor %}
-    </select>
-    <div class="submit-favorite">
-        <button onclick="addFavorite()">Add Favorite</button>
-    </div>
+<select id="location-list">
+    {% for location in parkingData %}
+    <option class="parking-location" value="{{ location[1] }}-{{ location[6] }}%">{{ location[1] }} - {{ location[6] }}%</option>
+    {% endfor %}
+</select>
+<div class="submit-favorite">
+    <button onclick="addFavorite()">Add Favorite</button>
 </div>
 <script>
     function addFavorite() {
@@ -41,17 +29,17 @@
         var location = split[0];
         var capacity = parseInt(split[1]);
         $.ajax({
-                type: "POST",
-                url: "/add-favorites",
-                data: { "location": location, "capacity": capacity }, 
-                contentType: 'application/json;charset=UTF-8',
-                dataType: 'json',
-                success: function(data) {
-                    console.log('successfully posted data! response body: ' + data);
-                }
-            });
-        }
+            type: "POST",
+            url: "/add-favorites",
+            data: { "location": location, "capacity": capacity }, 
+            contentType: 'application/json;charset=UTF-8',
+            dataType: 'json',
+            success: function(data) {
+                console.log('successfully posted data! response body: ' + data);
+            }
+        });
+    }
+</script>
+{% include "footer.html" %}
 
-        {% include "footer.html" %}
-
-        {% endblock %}
+{% endblock %}

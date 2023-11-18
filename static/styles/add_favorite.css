@@ -1,38 +1,25 @@
-.add-favorite-parking-header {
-    margin: 10px;
-}
-
-.header {
-    color: #C9E03C;
+.add-favorites-header {
+    margin: 20px;
+    margin-bottom: 10px;
     text-align: center;
-    margin: 0;
-}
-
-.label-header {
     color: #C9E03C;
-    text-shadow: black;
-    margin-inline: 40px;
 }
 
-.favorite-container {
-    width: 75%;
-    margin: 0 auto;
+.add-location-header {
+    margin: 10px;
+    text-align: center;
+    color: #C9E03C;
 }
 
-.location-container {
-    margin-bottom: 30px;
+#location-list {
+    width: 50%;
+    text-align: center;
+    margin: 0 25%;
+    margin-top: 20px;
+    padding: 5px;
 }
 
-#label-list {
-    width: 70%;
-    margin-block: 20px;
-    font-size: large;
-    margin-inline: 40px;
-    
-}
-
-.submit-favorite button {
-    margin-bottom: 20px;
-    margin-inline: 40px;
-    
+.submit-favorite {
+    text-align: center;
+    margin-top: 10px;
 }

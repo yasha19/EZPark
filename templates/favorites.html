@@ -5,22 +5,22 @@
 
 {% include "header.html" %}
 
-<div class="classes-header">
+<div class="favorites-header">
     <h1 class="header">
         Favorites
     </h1>
 </div>
-<div class="class-container">
-    <ul id="class-list">
+<div class="favorites-container">
+    <ul id="favorites-list">
         {% for location in favData %}
-            <li class="course-list">
+            <li class="favorites-list">
                 Location: {{ location[1] }}, Capacity: {{ location[2] }}% <button class="delete-btn" onclick='var location = "{{ location[1] }}";var capacity="{{ location[2] }}";removeFavorite(location,capacity);'>Remove</button><script></script>
             </li>
         {% endfor %}
     </ul>
 </div>
-<div class="add-class-button-container">
-    <button class="add-class-button" onclick="window.location.href='/add-favorites'">Add Favorites</button>
+<div class="add-favorites-button-container">
+    <button class="add-favorites-button" onclick="window.location.href='/add-favorites'">Add Favorites</button>
 </div>
 <script>
     function removeFavorite(location, capacity) {
