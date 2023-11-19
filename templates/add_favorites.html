@@ -9,22 +9,37 @@
         Add Favorite Parking
     </h1>
 </div>
+<p id="saved-data-indicator">Parking location saved!</p>
 <div class="add-location-container">
     <h2 class="add-location-header">
         Parking Location
     </h2>
 </div>
-<select id="location-list">
+<select id="location-list" onchange="clearSavedText()">
+    <option class="parking-location" value=""></option>
     {% for location in parkingData %}
     <option class="parking-location" value="{{ location[1] }}-{{ location[6] }}%">{{ location[1] }} - {{ location[6] }}%</option>
     {% endfor %}
 </select>
 <div class="submit-favorite">
-    <button onclick="addFavorite()">Add Favorite</button>
+    <button id="save-data-btn" class="save-data-btn" onclick="addFavorite()" disabled>Save</button>
 </div>
+
+{% include "footer.html" %}
+
 <script>
+    function clearSavedText() {
+        document.getElementById("saved-data-indicator").style.visibility = "hidden";
+        var disableBtn = course=document.getElementById("location-list").value == "";
+        if (disableBtn) {
+            document.getElementById("save-data-btn").disabled = true;
+        } else {
+            document.getElementById("save-data-btn").disabled = false;
+        } 
+    }
+
     function addFavorite() {
-        var location_capacity=document.getElementById("location-list").value;
+        var location_capacity = document.getElementById("location-list").value;
         var split = location_capacity.split('-');
         var location = split[0];
         var capacity = parseInt(split[1]);
@@ -36,10 +51,18 @@
             dataType: 'json',
             success: function(data) {
                 console.log('successfully posted data! response body: ' + data);
+            },
+            complete: function() {
+                document.getElementById("location-list").value = "";
+                document.getElementById("saved-data-indicator").style.visibility = "visible";
+                document.getElementById("save-data-btn").disabled = true;
             }
         });
     }
+    
+    function goHome() {
+        window.location.href="/favorites";
+    }
 </script>
-{% include "footer.html" %}
 
 {% endblock %}

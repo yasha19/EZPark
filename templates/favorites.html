@@ -10,34 +10,50 @@
         Favorites
     </h1>
 </div>
+
+{% if favData|length > 0: %}
 <div class="favorites-container">
     <ul id="favorites-list">
         {% for location in favData %}
             <li class="favorites-list">
-                Location: {{ location[1] }}, Capacity: {{ location[2] }}% <button class="delete-btn" onclick='var location = "{{ location[1] }}";var capacity="{{ location[2] }}";removeFavorite(location,capacity);'>Remove</button><script></script>
+                Location: {{ location[1] }}, Capacity: {{ location[2] }}% <i class="fa-solid fa-trash"  onclick='var location = "{{ location[1] }}";var capacity="{{ location[2] }}";removeFavorite(location,capacity);'></i>
             </li>
         {% endfor %}
     </ul>
 </div>
-<div class="add-favorites-button-container">
-    <button class="add-favorites-button" onclick="window.location.href='/add-favorites'">Add Favorites</button>
+{% else %}
+<div class="empty-data-container">
+    <h3 class="empty-data-header">Press the "Add Favorite" button to add your favorite locations</h3>
 </div>
+{% endif %}
+
+<div class="add-favorites-button-container">
+    <button class="add-favorites-button add-data-btn" onclick="window.location.href='/add-favorites'">Add Favorite<i class="fa-solid fa-plus"></i></button>
+</div>
+
+{% include "footer.html" %}
+
 <script>
     function removeFavorite(location, capacity) {
 
         $.ajax({
-            type: "POST",
+            type: "DELETE",
             url: "/favorites",
             data: { "location": location, "capacity": capacity }, 
             contentType: 'application/json;charset=UTF-8',
             dataType: 'json',
             success: function(data) {
-                console.log('successfully posted data! response body: ' + data);
+                console.log('successfully deleted favorite!');
+            },
+            complete: function() {
+                window.location.reload();
             }
         });
     }
-</script>
 
-{% include "footer.html" %}
+    function goHome() {
+        window.location.href="/home";
+    }
+</script>
 
 {% endblock %}

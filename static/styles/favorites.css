@@ -40,3 +40,8 @@
 .add-favorites-button {
     justify-content: center;
 }
+
+.empty-data-header {
+    text-align: center;
+    color: #C9E03C;
+}

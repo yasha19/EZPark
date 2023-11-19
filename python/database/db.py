@@ -25,6 +25,10 @@ class Database:
         self.cursor.execute("SELECT * FROM parkingLocations")
         return self.cursor.fetchall()
     
+    def get_all_bus_locations(self):
+        self.cursor.execute("SELECT * FROM busLocations")
+        return self.cursor.fetchall()
+    
     def get_profile_by_id(self, user_id: str):
         # user_id_tuple = tuple(user_id,)
         self.cursor.execute("SELECT * FROM profile where gid = %s", (user_id,))

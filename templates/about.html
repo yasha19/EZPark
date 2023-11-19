@@ -2,6 +2,13 @@
 
 {% block content %}
 
+{% include "header.html" %}
+
 {% include "footer.html" %}
 
+<script>
+    function goHome() {
+        window.location.href="/home";
+    }
+</script>
 {% endblock %}

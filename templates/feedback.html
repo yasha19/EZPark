@@ -2,6 +2,8 @@
 
 {% block content %}
 
+{% include "header.html" %}
+
 <form action="/submit_feedback" method="post">
     <label for="feedback"> Feedback:</label><br>
     <textarea id="feedback" name="feedback" rows="10" cols="30"></textarea><br>
@@ -9,5 +11,11 @@
 </form>
 
 {% include "footer.html" %}
+
+<script>
+    function goHome() {
+        window.location.href="/home";
+    }
+</script>
 
 {% endblock %}
