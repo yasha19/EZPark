@@ -135,72 +135,84 @@ def map_page():
         return render_template('interactive_map.html', classData=courses, parkingData=lots, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
     
-@app.route('/classes', methods=['GET', 'POST'])
-def classes_page():
+@app.route('/classes', methods=['GET'])
+def classes_home_page():
     global userId, classes
     if isValidSession(userId):
-        if request.method == 'GET':
-            classes = []
-            classes = db.get_all_classes_by_user(userId)
-            print(classes)
-        else:
-            data = request.data.decode('utf-8')
-            data = parse_qs(data)
-            course = data['course']
-            location = data['location']
-            db.delete_class(userId, course[0], location[0])
-            classes = db.get_all_classes_by_user(userId)
-            return redirect(url_for('classes_page'))
+        classes = db.get_all_classes_by_user(userId)
+        return render_template('classes.html', classData=classes, buildingData=buildings, backDisplay=True, aboutDisplay=False)
+    return redirect(url_for('login_page'))
+    
+@app.route('/classes', methods=['DELETE'])
+def delete_classes():
+    global userId, classes
+    if isValidSession(userId):
+        data = request.data.decode('utf-8')
+        data = parse_qs(data)
+        course = data['course']
+        location = data['location']
+        db.delete_class(userId, course[0], location[0])
+        classes = db.get_all_classes_by_user(userId)
         return render_template('classes.html', classData=classes, buildingData=buildings, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
-@app.route('/add-classes', methods=['GET', 'POST'])
-def add_classes_page():
+@app.route('/add-classes', methods=['GET'])
+def add_classes_home_page():
     global userId, buildings
     if isValidSession(userId):
-        if request.method == 'GET':
-            return render_template('add_classes.html', buildingData=buildings, backDisplay=True, aboutDisplay=False)
-        else:
-            data = request.data.decode('utf-8')
-            data = parse_qs(data)
-            course = data['course']
-            location = data['location']
-            db.insert_new_class(userId, course[0], location[0])
-            return render_template('add_classes.html', buildingData=buildings, backDisplay=True, aboutDisplay=False)
+        return render_template('add_classes.html', buildingData=buildings, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
-@app.route('/favorites', methods=['GET', 'POST'])
-def favorites_page():
+@app.route('/add-classes', methods=['POST'])
+def add_classes():
+    global userId, buildings
+    if isValidSession(userId):
+        data = request.data.decode('utf-8')
+        data = parse_qs(data)
+        course = data['course']
+        location = data['location']
+        db.insert_new_class(userId, course[0], location[0])
+        return render_template('add_classes.html', buildingData=buildings, backDisplay=True, aboutDisplay=False)
+    return redirect(url_for('login_page'))
+
+@app.route('/favorites', methods=['GET'])
+def favorites_home_page():
     global userId, favorites
     if isValidSession(userId):
-        if request.method == 'GET':
-            favorites = []
-            favorites = db.get_all_favorites_by_user(userId)
-            print(favorites)
-        else:
-            data = request.data.decode('utf-8')
-            data = parse_qs(data)
-            location = data['location']
-            capacity = data['capacity']
-            db.delete_favorite(userId, location[0], capacity[0])
-            favorites = db.get_all_favorites_by_user(userId)
-            return redirect(url_for('favorites_page'))
+        favorites = db.get_all_favorites_by_user(userId)
         return render_template('favorites.html', favData=favorites, parkingData=parking_decks, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
-@app.route('/add-favorites', methods=['GET', 'POST'])
-def add_favorites_page():
+@app.route('/favorites', methods=['DELETE'])
+def delete_favorites():
+    global userId, favorites
+    if isValidSession(userId):
+        data = request.data.decode('utf-8')
+        data = parse_qs(data)
+        location = data['location']
+        capacity = data['capacity']
+        db.delete_favorite(userId, location[0], capacity[0])
+        favorites = db.get_all_favorites_by_user(userId)
+        return render_template('favorites.html', favData=favorites, parkingData=parking_decks, backDisplay=True, aboutDisplay=False)
+    return redirect(url_for('login_page'))
+
+@app.route('/add-favorites', methods=['GET'])
+def add_favorites_home_page():
     global userId, parking_decks
     if isValidSession(userId):
-        if request.method == 'GET':
-            return render_template('add_favorites.html', parkingData=parking_decks, backDisplay=True, aboutDisplay=False)
-        else:
-            data = request.data.decode('utf-8')
-            data = parse_qs(data)
-            location = data['location']
-            capacity = data['capacity']
-            db.insert_new_favorite(userId, location[0], capacity[0])
-            return render_template('add_favorites.html', parkingData=parking_decks, backDisplay=True, aboutDisplay=False)
+        return render_template('add_favorites.html', parkingData=parking_decks, backDisplay=True, aboutDisplay=False)
+    return redirect(url_for('login_page'))
+
+@app.route('/add-favorites', methods=['POST'])
+def add_favorites():
+    global userId, parking_decks
+    if isValidSession(userId):
+        data = request.data.decode('utf-8')
+        data = parse_qs(data)
+        location = data['location']
+        capacity = data['capacity']
+        db.insert_new_favorite(userId, location[0], capacity[0])
+        return render_template('add_favorites.html', parkingData=parking_decks, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
     
 @app.route('/alerts')

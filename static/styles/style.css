@@ -7,6 +7,12 @@ body {
     margin: 0;
 }
 
+input, select {
+    height: 30px;
+    font-size: 16px;
+    padding-left: 10px;
+}
+
 .ezpark-container {
     display: flex;
     justify-content: space-between;
@@ -231,4 +237,53 @@ body {
     margin: 1rem 0 0;
     width: 50%;
     display: inline-block;
+}
+
+#saved-data-indicator {
+    color:#5c5ee9;
+    visibility: hidden;
+    text-align: center;
+    margin: 0;
+}
+
+.add-data-btn {
+    font-size: 25px;
+    height: 40px;
+    padding: 0 1em;
+    font-weight: bold;
+    background-color: transparent;
+    color:#5c5ee9;
+    border: 2px solid #5c5ee9;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.add-data-btn .fa-plus {
+    color:#5c5ee9;
+    font-size: 30px;
+    padding-left: 1rem;
+}
+
+.save-data-btn {
+    font-size: 25px;
+    height: 40px;
+    padding: 0 1em;
+    font-weight: bold;
+    color: white;
+    background-color: #5c5ee9;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.save-data-btn:disabled {
+    background-color: #3d3c3c;
+    cursor: not-allowed;
+}
+
+.fa-trash {
+    color: #f59191;
+    font-size: 20px;
+    cursor: pointer;
 }

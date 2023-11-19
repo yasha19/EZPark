@@ -9,29 +9,41 @@
         Add Class
     </h1>
 </div>
+<p id="saved-data-indicator">Class saved!</p>
 <div class="course-container">
     <h2 class="label-header">
         Course
     </h2>
-    <input type="text" name="course-text" id="course-text"/>
+    <input type="text" name="course-text" id="course-text" placeholder="ITSC 4155" onfocus="clearSavedText()"/>
 </div>
 <div class="location-container">
     <h2 class="label-header">
         Location
     </h2>
-    <select id="label-list">
+    <select id="label-list" onchange="clearSavedText()">
+        <option class="building-location" value=""></option>
         {% for building in buildingData %}
         <option class="building-location" value="{{ building[1] }}">{{ building[1] }}</option>
         {% endfor %}
     </select>
     <div class="submit-class">
-        <button onclick="addClass()">Add Class</button>
+        <button id="save-data-btn" class="save-data-btn" onclick="addClass()" disabled>Save</button>
     </div>
 </div>
 
 {% include "footer.html" %}
 
 <script>
+    function clearSavedText() {
+        document.getElementById("saved-data-indicator").style.visibility = "hidden";
+        var disableBtn = course=document.getElementById("course-text").value == "" || document.getElementById("label-list").value == "";
+        if (disableBtn) {
+            document.getElementById("save-data-btn").disabled = true;
+        } else {
+            document.getElementById("save-data-btn").disabled = false;
+        } 
+    }
+
     function addClass() {
         var course=document.getElementById("course-text").value;
         var location=document.getElementById("label-list").value;
@@ -43,6 +55,12 @@
             dataType: 'json',
             success: function(data) {
                 console.log('successfully posted data! response body: ' + data);
+            },
+            complete: function() {
+                document.getElementById("course-text").value = "";
+                document.getElementById("label-list").value = "";
+                document.getElementById("saved-data-indicator").style.visibility = "visible";
+                document.getElementById("save-data-btn").disabled = true;
             }
         });
     }
