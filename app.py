@@ -11,7 +11,7 @@ from urllib.parse import parse_qs
 app = Flask(__name__)
 app.secret_key = 'uCraR5MZB/AvVo3Q24cBM/fZo5Kv/hV2HW9y0b3puClB25h0lbjBP6vYsHzz1hVY'
 HOST, PORT = 'localhost', 8080
-global userId, profile, buildings, favorites, classes, alerts, db, parking_decks
+global userId, profile, buildings, favorites, classes, alerts, db, parking_decks, bus_locations
 userId = None
 profile = None
 favorites = None
@@ -20,6 +20,7 @@ alerts = None
 db = Database()
 buildings = db.get_all_buildings()
 parking_decks = db.get_all_parking_decks()
+bus_locations = db.get_all_bus_locations()
 
 @app.route('/')
 def index_page():
@@ -114,7 +115,7 @@ def home_with_credentials_page():
     
 @app.route('/map')
 def map_page():
-    global userId, parking_decks, classes
+    global userId, parking_decks, classes, bus_locations
     if isValidSession(userId):
         courses = []
         lots = []
@@ -132,7 +133,7 @@ def map_page():
             lots.append(newLot)
         print(lots)
 
-        return render_template('interactive_map.html', classData=courses, parkingData=lots, backDisplay=True, aboutDisplay=False)
+        return render_template('interactive_map.html', classData=courses, parkingData=lots, busData=bus_locations, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
     
 @app.route('/classes', methods=['GET', 'POST'])
