@@ -1,0 +1,46 @@
+/* label[for="feedback"] {
+    display: block;
+    text-align: center;
+    font-weight: bold;
+    color: #C9E03C;
+  }
+  
+#feedback {
+    display: block;
+    margin: 0 auto;
+  } */
+
+
+
+.feedback-container {
+    margin: 2rem auto;
+    width: 80%;
+    max-width: 600px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .feedback-container h2 {
+    text-align: center;
+    color: #1C732F;
+  }
+  
+  #feedbackForm {
+    text-align: center;
+  }
+  
+  #feedbackForm label {
+    display: block;
+    margin-bottom: 5px;
+    color: #1C732F;
+  }
+  
+  #feedbackForm textarea {
+    width: 100%;
+    resize: vertical;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }  

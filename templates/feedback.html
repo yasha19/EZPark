@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+<!-- {% extends "layout.html" %}
 
 {% block content %}
 
@@ -18,4 +18,59 @@
     }
 </script>
 
+{% endblock %} -->
+
+
+
+
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% include "header.html" %}
+  
+<div class="feedback-container">
+    <h2>Report Incorrect Parking Availability or Information</h2>
+    <form id="feedbackForm">
+      <label for="userId">User ID:</label>
+      <input type="text" id="userId" name="userId" value="{{ userId }}" readonly><br><br>
+
+      <label for="feedback">Feedback:</label><br>
+      <textarea id="feedback" name="feedback" rows="4" cols="50"></textarea><br><br>
+
+      <input type="button" value="Submit Feedback" onclick="submitFeedback()">
+    </form>
+</div>
+
+{% include "footer.html" %}
+  
+<script>
+    function submitFeedback() {
+      const userId = document.getElementById('userId').value;
+      const feedback = document.getElementById('feedback').value;
+
+      const xhr = new XMLHttpRequest();
+      
+      xhr.open('POST', '/submit-feedback', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          alert('Feedback submitted successfully!');
+          // Clear the form after submission if needed
+          document.getElementById('feedbackForm').reset();
+        } else {
+          alert('Failed to submit feedback. Please try again.');
+        }
+      };
+
+      const data = JSON.stringify({ userId: userId, feedback: feedback });
+
+      xhr.send(data);
+    }
+
+    function goHome() {
+        window.location.href="/home";
+    }
+</script>
 {% endblock %}
