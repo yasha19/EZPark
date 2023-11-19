@@ -21,6 +21,10 @@ input, select {
     background-color: #1C732F;
     color: #C9E03C;
 }
+.ezpark-container-header {
+    cursor: pointer;
+    margin-left: 20px;
+}
 
 .expark-container-header-buttons {
     display: flex;
@@ -209,20 +213,20 @@ input, select {
     width: 90%;
 }
 
-.class-container {
+.route-selection-container .route-class-container {
     margin-right: 10%;
 }
 
-.class-container, .travel-mode-container {
+.route-selection-container .route-class-container, .travel-mode-container {
     width: 45%;
     float: left;
 }
-.class-container label, .travel-mode-container label {
+.route-selection-container .route-class-container label, .travel-mode-container label {
     width: 100%;
     display: block;
     margin-bottom: .5rem;
 }
-.class-container select, .travel-mode-container select {
+.route-selection-container .route-class-container select, .travel-mode-container select {
     width: 100%;
     display: block;
     height: 2rem;
@@ -233,7 +237,7 @@ input, select {
     visibility: hidden;
 }
 
-.calculation-container {
+.route-selection-container .calculation-container {
     margin: 1rem 0 0;
     width: 50%;
     display: inline-block;
