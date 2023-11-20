@@ -5,7 +5,7 @@
 {% include "header.html" %}
 
 <div class="route-selection-container">
-    <div class="class-container">
+    <div class="route-class-container">
         <label for="class-selector">Class destination</label>
         <select id="class-selector">
             <option class="course-option" value="" selected></option>
@@ -54,6 +54,7 @@
         {% endfor %}
     </ul>
 </div> -->
+
 
 <script>    
 
@@ -130,6 +131,8 @@
         const { Map } = await google.maps.importLibrary("maps");
         const { DirectionsService } = await google.maps.importLibrary("routes");
         const { DirectionsRenderer } = await google.maps.importLibrary("routes");
+        const iconBase = "https://maps.google.com/mapfiles/kml/shapes/";
+        const busIcon = iconBase + "bus_maps.png";
         let directionsService = new DirectionsService();
         let directionsRenderer = new DirectionsRenderer();
         var current;
@@ -143,6 +146,25 @@
             center: current
         }
         map = new Map(document.getElementById('google-map-container'), mapOptions);
+
+        // Bus stop markers
+        var busData = {{ busData | tojson | safe }}
+        for(var i = 0; i < busData.length; i++){
+            var title = (busData[i][0]).toString();
+            var latLng = {
+                lat: parseFloat(busData[i][1]),
+                lng: parseFloat(busData[i][2]),
+            };
+
+            var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                icon: busIcon,
+                title: title
+
+            });
+        }
+
 
         const onChangeHandler = function () {
             calculateRoute(directionsService, directionsRenderer, position);
