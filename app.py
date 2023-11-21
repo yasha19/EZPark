@@ -4,6 +4,7 @@ import datetime
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from flask import Flask, render_template, request, make_response, redirect, url_for, session
+import smtplib
 from python.database.db import Database
 from python.web.parking import get_parking_availability
 from urllib.parse import parse_qs
@@ -11,12 +12,13 @@ from urllib.parse import parse_qs
 app = Flask(__name__)
 app.secret_key = 'uCraR5MZB/AvVo3Q24cBM/fZo5Kv/hV2HW9y0b3puClB25h0lbjBP6vYsHzz1hVY'
 HOST, PORT = 'localhost', 8080
-global userId, profile, buildings, favorites, classes, alerts, db, parking_decks, bus_locations
+global userId, profile, buildings, favorites, classes, alerts, feedback, db, parking_decks, bus_locations
 userId = None
 profile = None
 favorites = None
 classes = None
 alerts = None
+feedback = None
 db = Database()
 buildings = db.get_all_buildings()
 parking_decks = db.get_all_parking_decks()
@@ -230,19 +232,29 @@ def alerts_page():
 @app.route('/feedback', methods=['GET','POST'])
 def feedback_page():
     print("feedback_page")
-    global userId
+    global userId, feedback
     if isValidSession(userId):
         if request.method == 'GET':
             return render_template('feedback.html', backDisplay=True, aboutDisplay=False)
         else:
-            # Put the code for sending a feedback to email here
 
-            # user = request.form['userId']
-            # feedback = request.form['feedback']
-            # send_feedback(user, feedback)
+            user = request.form['userId']
+            feedback = request.form['feedback']
+            send_feedback(user, feedback)
+        return render_template('feedback.html', backDisplay=True, aboutDisplay=False)
+    return redirect(url_for('login_page')) 
 
-            return render_template('feedback.html', backDisplay=True, aboutDisplay=False)
-    return redirect(url_for('login_page'))    
+def send_feedback(user, feedback):
+    # Code to send an email notification
+    sender_email = " ",
+    receiver_email = " ",
+    password = " ", 
+
+    message = f"Subject: Feedback from {user}\n\n{feedback}"
+
+    with smtplib.SMTP_SSL("smtp.uncc.edu", 8080) as server:
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, message)   
 
 def isValidSession(user_id):
     if (user_id != None) and ('user_id' in session) and (session['user_id'] == userId):

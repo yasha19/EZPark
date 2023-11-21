@@ -3,25 +3,48 @@
 {% block content %}
 
 {% include "header.html" %}
-  
+
+<div class="feedback-header">
+  <h1 class="header">
+    Feedback
+  </h1>
+</div>
 <div class="feedback-container">
-    <h2>Report Incorrect Parking Availability or Information</h2>
-    <form id="feedbackForm">
-      <label for="userId">User ID:</label>
-      <input type="text" id="userId" name="userId" value="{{ userId }}" readonly><br><br>
-
-      <label for="feedback">Feedback:</label><br>
-      <textarea id="feedback" name="feedback" rows="4" cols="50"></textarea><br><br>
-
-      <input type="button" value="Submit Feedback" onclick="submitFeedback()">
-    </form>
+  <form id="feedbackForm">
+    <textarea id="feedback" name="feedback" rows="8" cols="50" placeholder="How can we help you?"></textarea><br><br>
+    <input type="button" value="Submit" onclick="submitFeedback()">
+  </form>
 </div>
 
 {% include "footer.html" %}
-  
+
 <script>
-    function goHome() {
-        window.location.href="/home";
-    }
+  function submitFeedback() {
+    const feedbackText = document.getElementById('feedback').value;
+    fetch('/feedback', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+        body: JSON.stringify({ feedback: feedbackText })
+    })
+    .then(response => {
+      if (response.ok) {
+          alert('Feedback submitted successfully!');
+                window.location.href = '/home'; // Redirect to home after submission
+          } else {
+              alert('Failed to submit feedback. Please try again.');
+          }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+        alert('An error occurred while submitting feedback.');
+    });
+  }
+
+  function goHome() {
+    window.location.href="/home";
+  }
 </script>
+
 {% endblock %}

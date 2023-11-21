@@ -135,6 +135,16 @@ input, select {
     text-decoration: underline;
 }
 
+.feedback-btn > a { 
+    color: #FFFFFF;
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+.feedback-btn > a:hover {
+    text-decoration: underline;
+}
+
 #google-signin-btn {
     margin: 2rem auto;
     display: inline-block;
