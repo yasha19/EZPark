@@ -232,29 +232,17 @@ def alerts_page():
 @app.route('/feedback', methods=['GET','POST'])
 def feedback_page():
     print("feedback_page")
-    global userId, feedback
+    global userId, feedback, profile
     if isValidSession(userId):
         if request.method == 'GET':
-            return render_template('feedback.html', backDisplay=True, aboutDisplay=False)
+            return render_template('feedback.html', profileData=profile, backDisplay=True, aboutDisplay=False)
         else:
 
-            user = request.form['userId']
-            feedback = request.form['feedback']
-            send_feedback(user, feedback)
-        return render_template('feedback.html', backDisplay=True, aboutDisplay=False)
-    return redirect(url_for('login_page')) 
-
-def send_feedback(user, feedback):
-    # Code to send an email notification
-    sender_email = " ",
-    receiver_email = " ",
-    password = " ", 
-
-    message = f"Subject: Feedback from {user}\n\n{feedback}"
-
-    with smtplib.SMTP_SSL("smtp.uncc.edu", 8080) as server:
-        server.login(sender_email, password)
-        server.sendmail(sender_email, receiver_email, message)   
+            # user = request.form['userId']
+            # feedback = request.form['feedback']
+            # send_feedback(user, feedback)
+            return render_template('feedback.html', backDisplay=True, aboutDisplay=False)
+    return redirect(url_for('login_page'))   
 
 def isValidSession(user_id):
     if (user_id != None) and ('user_id' in session) and (session['user_id'] == userId):

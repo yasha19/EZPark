@@ -19,6 +19,9 @@
 {% include "footer.html" %}
 
 <script>
+  var profileData = {{ profileData | tojson | safe }};
+  console.log(profileData[4]);
+
   function submitFeedback() {
     const feedbackText = document.getElementById('feedback').value;
     fetch('/feedback', {
@@ -41,7 +44,7 @@
         alert('An error occurred while submitting feedback.');
     });
   }
-
+  
   function goHome() {
     window.location.href="/home";
   }
