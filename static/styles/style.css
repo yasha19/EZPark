@@ -244,7 +244,7 @@ input, select {
 }
 
 #saved-data-indicator {
-    color:#5c5ee9;
+    color:#e7e95c;
     visibility: hidden;
     text-align: center;
     margin: 0;
@@ -256,14 +256,14 @@ input, select {
     padding: 0 1em;
     font-weight: bold;
     background-color: transparent;
-    color:#5c5ee9;
-    border: 2px solid #5c5ee9;
+    color:#e7e95c;
+    border: 2px solid #e7e95c;
     border-radius: 20px;
     cursor: pointer;
 }
 
 .add-data-btn .fa-plus {
-    color:#5c5ee9;
+    color:#e7e95c;
     font-size: 30px;
     padding-left: 1rem;
 }
@@ -274,7 +274,7 @@ input, select {
     padding: 0 1em;
     font-weight: bold;
     color: white;
-    background-color: #5c5ee9;
+    background-color: #e7e95c;
     border: none;
     border-radius: 20px;
     cursor: pointer;
