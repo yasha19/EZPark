@@ -229,25 +229,20 @@ def alerts_page():
         return render_template('alerts.html', alertData=alerts, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
-
-@app.route('/feedback', methods=['GET'])
-def feedback_page():
-    print("feedback_page")
-    global userId, feedback, profile
-    if isValidSession(userId):
-        return render_template('feedback.html', profileData=profile, backDisplay=True, aboutDisplay=False)
-    return redirect(url_for('feedback_page'))
-
-@app.route('/feedback', methods=['POST'])
+@app.route('/feedback', methods=['GET','POST'])
 def feedback_page():
     global userId, feedback, profile
     if isValidSession(userId):
-        data = request.data.decode('utf-8')
-        data = parse_qs(data)
-        feedback = data['feedback']
-        profile = db.get_profile_by_id(userId, feedback[0])
-        return render_template('feedback.html', profileData=profile, backDisplay=True, aboutDisplay=False)
+        if request.method == 'GET':
+            return render_template('feedback.html', profileData=profile, backDisplay=True, aboutDisplay=False)
+        else:
+            data = request.data.decode('utf-8')
+            data = parse_qs(data)
+            feedback = data['feedback']
+            profile = db.get_profile_by_id(userId, feedback[0])
+            return render_template('feedback.html', profileData=profile, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('feedback_page'))
+
 
 def isValidSession(user_id):
     if (user_id != None) and ('user_id' in session) and (session['user_id'] == userId):
