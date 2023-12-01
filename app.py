@@ -172,7 +172,7 @@ def add_classes():
     if isValidSession(userId):
         data = request.data.decode('utf-8')
         data = parse_qs(data)
-        course = data['course']
+        course = data['course']    
         location = data['location']
         db.insert_new_class(userId, course[0], location[0])
         return render_template('add_classes.html', buildingData=buildings, backDisplay=True, aboutDisplay=False)
@@ -227,29 +227,33 @@ def alerts_page():
         # alerts = db.get_alerts_by_date(now)
 
         return render_template('alerts.html', alertData=alerts, backDisplay=True, aboutDisplay=False)
-    return redirect(url_for('login_page')) 
-    
-@app.route('/feedback', methods=['GET','POST'])
+    return redirect(url_for('login_page'))
+
+
+@app.route('/feedback', methods=['GET'])
 def feedback_page():
     print("feedback_page")
     global userId, feedback, profile
     if isValidSession(userId):
-        if request.method == 'GET':
-            return render_template('feedback.html', profileData=profile, backDisplay=True, aboutDisplay=False)
-        else:
+        return render_template('feedback.html', profileData=profile, backDisplay=True, aboutDisplay=False)
+    return redirect(url_for('feedback_page'))
 
-            # user = request.form['userId']
-            # feedback = request.form['feedback']
-            # send_feedback(user, feedback)
-            return render_template('feedback.html', backDisplay=True, aboutDisplay=False)
-    return redirect(url_for('login_page'))   
+@app.route('/feedback', methods=['POST'])
+def feedback_page():
+    global userId, feedback, profile
+    if isValidSession(userId):
+        data = request.data.decode('utf-8')
+        data = parse_qs(data)
+        feedback = data['feedback']
+        profile = db.get_profile_by_id(userId, feedback[0])
+        return render_template('feedback.html', profileData=profile, backDisplay=True, aboutDisplay=False)
+    return redirect(url_for('feedback_page'))
 
 def isValidSession(user_id):
     if (user_id != None) and ('user_id' in session) and (session['user_id'] == userId):
         print("User validated")
         return True
     return False
-
 
 
 

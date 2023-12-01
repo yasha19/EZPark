@@ -23,30 +23,26 @@
   console.log(profileData[4]);
 
   function submitFeedback() {
-    const feedbackText = document.getElementById('feedback').value;
-    fetch('/feedback', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
+    var feedback = document.getElementById('feedback-text').value;
+
+    $.ajax({
+      type: 'POST', //sending the post
+      url: '/feedback',
+      data: { "feedback": feedback },
+      contentType: 'application/json;charset=UTF-8',
+      dataType: 'json',
+      success: function (data) {
+        console.log('Feedback submitted successfully!' + data);
+        window.location.href = '/feedback'; // Redirect to feedback after submission
       },
-        body: ({ feedback: feedbackText })
-    })
-    .then(response => {
-      if (response.ok) {
-          alert('Feedback submitted successfully!');
-                window.location.href = '/home'; // Redirect to home after submission
-          } else {
-              alert('Failed to submit feedback. Please try again.');
-          }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-        alert('An error occurred while submitting feedback.');
+      error: function () {
+        console.log('Failed to submit feedback. Please try again.');
+      }
     });
   }
-  
+
   function goHome() {
-    window.location.href="/home";
+    window.location.href = '/home';
   }
 </script>
 
