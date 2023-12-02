@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import datetime
+from datetime import datetime
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from flask import Flask, render_template, request, make_response, redirect, url_for, session
@@ -11,12 +12,13 @@ from urllib.parse import parse_qs
 app = Flask(__name__)
 app.secret_key = 'uCraR5MZB/AvVo3Q24cBM/fZo5Kv/hV2HW9y0b3puClB25h0lbjBP6vYsHzz1hVY'
 HOST, PORT = 'localhost', 8080
-global userId, profile, buildings, favorites, classes, alerts, db, parking_decks, bus_locations
+global userId, profile, buildings, favorites, classes, alerts, db, parking_decks, bus_locations, capacities
 userId = None
 profile = None
 favorites = None
 classes = None
 alerts = None
+capacities = None
 db = Database()
 buildings = db.get_all_buildings()
 parking_decks = db.get_all_parking_decks()
@@ -81,7 +83,7 @@ def home_page():
     
 @app.route('/home', methods=['POST'])
 def home_with_credentials_page():
-    global userId, profile
+    global userId, profile, capacities
     
     try:
         token = request.form['g_csrf_token']
@@ -108,6 +110,30 @@ def home_with_credentials_page():
 
         home_page = make_response(redirect(url_for('home_page')))
         home_page.set_cookie('g_csrf_token', token)
+        
+        # Get the current time
+        curr_time = datetime.now()
+        mil_time = int(curr_time.strftime('%H'))
+        day = curr_time.strftime('%a') #ex. Mon04PM
+        # Keeps fridays capacities to not break app
+        if(day == 'Sat' or 'Sun'):
+            day = 'Fri'
+        # Sets the formatted time based on database times
+        if(mil_time >= 1 and mil_time < 12):
+            formatted_time = "" + day + "10AM"
+        elif(mil_time >= 12 and mil_time < 14):
+            formatted_time = "" + day + "12PM"
+        elif(mil_time >= 14 and mil_time < 16):
+            formatted_time = "" + day + "02PM"
+        elif(mil_time >= 16 and mil_time < 18):
+            formatted_time = "" + day + "04PM"
+        else:
+            formatted_time = "" + day + "06PM" 
+        
+        # Gets capacity for current time and day
+        capacities = db.get_all_capacities(column=formatted_time)
+        # Changes cpacity values in database based on time and day
+        db.change_capacities(capacities)
 
         return home_page
     except ValueError:
@@ -129,7 +155,7 @@ def map_page():
 
         for lot in parking_decks:
             lotAddress = f'{lot[2]}, {lot[3]}, {lot[4]} {lot[5]}'
-            newLot = (lot[1],) + (lotAddress,) + (lot[7],)
+            newLot = (lot[1],) + (lotAddress,) + (lot[7],) + (lot[8],) + (lot[9],) + (lot[6],)
             lots.append(newLot)
         print(lots)
 

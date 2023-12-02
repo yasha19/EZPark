@@ -132,7 +132,8 @@
         const { DirectionsService } = await google.maps.importLibrary("routes");
         const { DirectionsRenderer } = await google.maps.importLibrary("routes");
         const iconBase = "https://maps.google.com/mapfiles/kml/shapes/";
-        const busIcon = iconBase + "bus_maps.png";
+        const busIcon = {url: iconBase + "bus_maps.png", scaledSize: new google.maps.Size(30,30)};
+        const parkIcon = {url: iconBase + "parking_lot.png", scaledSize: new google.maps.Size(30,30)};
         let directionsService = new DirectionsService();
         let directionsRenderer = new DirectionsRenderer();
         var current;
@@ -142,8 +143,8 @@
             current = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         }
         let mapOptions = {
-            zoom:10,
-            center: current
+            zoom:15,
+            center: { lat: 35.308117252580544, lng: -80.7337048813489 }
         }
         map = new Map(document.getElementById('google-map-container'), mapOptions);
 
@@ -165,6 +166,42 @@
             });
         }
 
+        // Parking markers
+        var markers = [];
+        var parkingData = {{ parkingData | tojson | safe }}
+        for(var i = 0; i < parkingData.length; i++){
+            var title = (parkingData[i][0]).toString();
+            var latLng = {
+                lat: parseFloat(parkingData[i][3]),
+                lng: parseFloat(parkingData[i][4]),
+            };
+            
+            var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                icon: parkIcon,
+                title: title
+
+            });
+            markers.push(marker);
+        }
+
+        // Information window for parking icons
+        for(let i = 0; i < markers.length; i++){
+            var content = "Name: " +markers[i].title +'<br>'+"Type: "+parkingData[i][2]+'<br>'+"Capacity: "+parkingData[i][5]+"%";
+            infowindowClick(markers[i], content);
+        }
+        function infowindowClick(marker, content){
+            var infoWindow = new google.maps.InfoWindow({
+                content: content
+            });
+
+            marker.addListener('click', function(){
+
+                infoWindow.open(marker.getMap(), marker);
+            });
+        }
+    
 
         const onChangeHandler = function () {
             calculateRoute(directionsService, directionsRenderer, position);

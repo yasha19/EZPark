@@ -81,3 +81,14 @@ class Database:
             "DELETE FROM favorites WHERE parkingName = %s AND capacity = %s AND fprofileID = %s", (parking_name, capacity, student_id))
         self.connection.commit()
         return self.cursor.fetchall()
+
+    def get_all_capacities(self, column):
+        self.cursor.execute("SELECT location, "+ column +" FROM capacity")
+        return self.cursor.fetchall()
+    
+    def change_capacities(self, capacities):
+        for cap in capacities:
+            self.cursor.execute("UPDATE parkingLocations SET capacity = %s WHERE shortName = %s", (cap[1], cap[0]))
+        self.connection.commit()
+        return self.cursor.fetchall() 
+    
