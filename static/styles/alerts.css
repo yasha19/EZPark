@@ -1,0 +1,49 @@
+.alerts-container {
+    width: 75%;
+    margin: 0 auto;
+    background-color: #1C732F;
+    border-radius: 20px;
+    padding: 20px; 
+}
+
+.alerts-header {
+    margin: 10px;
+    color: #C9E03C; 
+}
+
+#alerts-list {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#alerts-list th {
+    color: white;
+}
+
+.alerts-list {
+    color: white;
+    padding: 15px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.alerts-list td {
+    padding: 10px;
+}
+
+.add-alerts-button-container {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.add-alerts-button {
+    justify-content: center;
+}
+
+.empty-data-header {
+    text-align: center;
+    color: #C9E03C;
+    margin-top: 20px; 
+}
