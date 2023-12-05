@@ -20,6 +20,14 @@
   resize: vertical;
 }
 
+#feedbackForm input[type="email"] {
+  width: 80%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical;
+}
+
 #feedbackForm input[type="button"] {
   padding: 5px 10px;
   background-color: #C9E03C;

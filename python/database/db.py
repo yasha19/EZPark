@@ -81,3 +81,8 @@ class Database:
             "DELETE FROM favorites WHERE parkingName = %s AND capacity = %s AND fprofileID = %s", (parking_name, capacity, student_id))
         self.connection.commit()
         return self.cursor.fetchall()
+    
+    def insert_feedback(self, user_id, feedback):
+        self.cursor.execute(
+            "INSERT INTO feedbacks (user_id, feedback_text) VALUES (%s, %s)", (user_id, feedback))
+        self.connection.commit()

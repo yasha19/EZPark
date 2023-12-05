@@ -1,13 +1,17 @@
-#!/usr/bin/env python3
-
 import datetime
+
+# import smtplib
+# from email.mime.multipart import MIMEMultipart
+# from email.mime.text import MIMEText
+
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from flask import Flask, render_template, request, make_response, redirect, url_for, session
-import smtplib
 from python.database.db import Database
 from python.web.parking import get_parking_availability
 from urllib.parse import parse_qs
+
+
 
 app = Flask(__name__)
 app.secret_key = 'uCraR5MZB/AvVo3Q24cBM/fZo5Kv/hV2HW9y0b3puClB25h0lbjBP6vYsHzz1hVY'
@@ -24,20 +28,21 @@ buildings = db.get_all_buildings()
 parking_decks = db.get_all_parking_decks()
 bus_locations = db.get_all_bus_locations()
 
+
 @app.route('/')
 def index_page():
     global userId
     if  isValidSession(userId):
         return redirect(url_for('home_page'))
     return redirect(url_for('login_page'))
-    
+   
 @app.route('/login')
 def login_page():
     global userId
     if isValidSession(userId):
         return redirect(url_for('home_page'))
     return render_template('login.html', backDisplay=False, aboutDisplay=False, settingsDisplay=True, logDisplay=True)
-    
+   
 @app.route('/logout')
 def logout_page():
     global userId, profile, favorites, classes, alerts
@@ -48,13 +53,14 @@ def logout_page():
     alerts = None
     session.pop('user_id', None)
     return redirect(url_for('login_page'))
-    
+   
 @app.route('/about')
 def about_page():
     global userId
     if isValidSession(userId):
         return render_template('about.html', backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
+
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile_page():
@@ -65,11 +71,13 @@ def profile_page():
         else:
             print("saving user settings")
 
+
             # profile.rec = request.form['rec']
             # profile.comType = request.form['comType']
             # db.update_profile(profile)
-            
+           
     return redirect(url_for('login_page'))
+
 
 @app.route('/home')
 def home_page():
@@ -80,41 +88,45 @@ def home_page():
             # profile = db.get_profile_by_id(userId)
         return render_template('home.html', profileData=profile, backDisplay=False, aboutDisplay=True)
     return redirect(url_for('login_page'))
-    
+   
 @app.route('/home', methods=['POST'])
 def home_with_credentials_page():
     global userId, profile
-    
+   
     try:
         token = request.form['g_csrf_token']
         credential = request.form['credential']
         decoded_token = id_token.verify_oauth2_token(credential, requests.Request(), '1031925357556-g9tr3am18n1vg8ce88svenjgj82onrvt.apps.googleusercontent.com')
 
+
         # ID for student account to be used in all other calls
-        userid = decoded_token['sub'] 
+        userid = decoded_token['sub']
         userId = userid
         session['user_id'] = userid
         session['g_csrf_token'] = token
+
 
         # Get profile ID, insert new profile if userId doesn't exist
         profile = db.get_profile_by_id(userId)
         if profile == None or len(profile) == 0:
             # Email for student account to be used in all other calls
             email = decoded_token['email']
-            
+           
             # Student account name
             FName = decoded_token['given_name']
             LName = decoded_token['family_name']
-            
+           
             db.insert_new_profile(userId, FName, LName, email)
+
 
         home_page = make_response(redirect(url_for('home_page')))
         home_page.set_cookie('g_csrf_token', token)
 
+
         return home_page
     except ValueError:
         return redirect(url_for('login_page'))
-    
+   
 @app.route('/map')
 def map_page():
     global userId, parking_decks, classes, bus_locations
@@ -129,15 +141,17 @@ def map_page():
                     newClass = class_ + (address,)
                     courses.append(newClass)
 
+
         for lot in parking_decks:
             lotAddress = f'{lot[2]}, {lot[3]}, {lot[4]} {lot[5]}'
             newLot = (lot[1],) + (lotAddress,) + (lot[7],)
             lots.append(newLot)
         print(lots)
 
+
         return render_template('interactive_map.html', classData=courses, parkingData=lots, busData=bus_locations, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
-    
+   
 @app.route('/classes', methods=['GET'])
 def classes_home_page():
     global userId, classes
@@ -145,7 +159,7 @@ def classes_home_page():
         classes = db.get_all_classes_by_user(userId)
         return render_template('classes.html', classData=classes, buildingData=buildings, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
-    
+   
 @app.route('/classes', methods=['DELETE'])
 def delete_classes():
     global userId, classes
@@ -159,12 +173,14 @@ def delete_classes():
         return render_template('classes.html', classData=classes, buildingData=buildings, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
+
 @app.route('/add-classes', methods=['GET'])
 def add_classes_home_page():
     global userId, buildings
     if isValidSession(userId):
         return render_template('add_classes.html', buildingData=buildings, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
+
 
 @app.route('/add-classes', methods=['POST'])
 def add_classes():
@@ -178,6 +194,7 @@ def add_classes():
         return render_template('add_classes.html', buildingData=buildings, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
+
 @app.route('/favorites', methods=['GET'])
 def favorites_home_page():
     global userId, favorites
@@ -185,6 +202,7 @@ def favorites_home_page():
         favorites = db.get_all_favorites_by_user(userId)
         return render_template('favorites.html', favData=favorites, parkingData=parking_decks, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
+
 
 @app.route('/favorites', methods=['DELETE'])
 def delete_favorites():
@@ -199,12 +217,14 @@ def delete_favorites():
         return render_template('favorites.html', favData=favorites, parkingData=parking_decks, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
+
 @app.route('/add-favorites', methods=['GET'])
 def add_favorites_home_page():
     global userId, parking_decks
     if isValidSession(userId):
         return render_template('add_favorites.html', parkingData=parking_decks, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
+
 
 @app.route('/add-favorites', methods=['POST'])
 def add_favorites():
@@ -217,7 +237,7 @@ def add_favorites():
         db.insert_new_favorite(userId, location[0], capacity[0])
         return render_template('add_favorites.html', parkingData=parking_decks, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
-    
+   
 @app.route('/alerts')
 def alerts_page():
     print("alerts_page")
@@ -226,8 +246,10 @@ def alerts_page():
         now = datetime.datetime.now()
         # alerts = db.get_alerts_by_date(now)
 
+
         return render_template('alerts.html', alertData=alerts, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
+
 
 @app.route('/feedback', methods=['GET','POST'])
 def feedback_page():
@@ -243,6 +265,15 @@ def feedback_page():
             return render_template('feedback.html', profileData=profile, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('feedback_page'))
 
+# def send_feedback_email(feedback_text):
+#     receiver_email = 'recipient@example.com'  # Update with the recipient's email
+
+#     message = MIMEMultipart()
+#     message['From'] = SENDER_EMAIL
+#     message['To'] = receiver_email
+#     message['Subject'] = 'Feedback Submission'
+
+
 
 def isValidSession(user_id):
     if (user_id != None) and ('user_id' in session) and (session['user_id'] == userId):
@@ -252,6 +283,13 @@ def isValidSession(user_id):
 
 
 
+
+
+
 if __name__ == '__main__':
     print('starting app...')
     app.run(ssl_context='adhoc', debug=True, host=HOST, port=PORT)
+
+
+
+            

@@ -1,8 +1,11 @@
 {% extends "layout.html" %}
 
+
 {% block content %}
 
+
 {% include "header.html" %}
+
 
 <div class="feedback-header">
   <h1 class="header">
@@ -16,14 +19,18 @@
   </form>
 </div>
 
+
 {% include "footer.html" %}
+
 
 <script>
   var profileData = {{ profileData | tojson | safe }};
   console.log(profileData[4]);
 
+
   function submitFeedback() {
-    var feedback = document.getElementById('feedback-text').value;
+    var feedback = document.getElementById('feedback').value;
+
 
     $.ajax({
       type: 'POST', //sending the post
@@ -41,9 +48,11 @@
     });
   }
 
+
   function goHome() {
     window.location.href = '/home';
   }
 </script>
+
 
 {% endblock %}
