@@ -27,13 +27,26 @@
             <option class="mode-option" value="TRANSIT">Transit</option>
         </select>
     </div>
+
+    <div class="parking-type-container">
+        <label for="parking-type-selector">Parking Type:</label>
+        <select id="parking-type-selector">
+            <option class="type-option" value="C">Commuter</option>
+            <option class="type-option" value="FS">Faculty/Staff</option>
+            <option class="type-option" value="R">Resident</option>
+            <option class="type-option" value="D">Disabled</option>
+        </select>
+    </div>
+
     <div class="calculation-container">
         <p>Best Route: <span id="best-route"></span></p>
         <p>Duration: <span id="duration"></span></p>
     </div>
     <select id="hidden-lot-select">
         {% for lot in parkingData %}
-            <option class="lot-option" value="{{ lot[1] }}">{{ lot[0] }}</option>
+            {% if lot[5] > 10 %}
+                <option class="lot-option" value="{{ lot[1] }}, {{ lot[2] }}">{{ lot[0] }}</option>
+            {% endif %}
         {% endfor %}
     </select>
 </div>
@@ -64,9 +77,20 @@
 
     function calculateRoute(directionsService, directionsRenderer, position) {
         var orig;
+        var locationArr = [];
         let courseLocation =  document.getElementById("class-selector").value;
         let lotLocations = document.getElementById("hidden-lot-select").options;
+        let parkingType = document.getElementById("parking-type-selector").value;
         let mode = document.getElementById("travel-mode-selector").value;
+
+        for(let i = 0; i < lotLocations.length; i++){
+            var splitArr = lotLocations[i].value.split(', ');
+            var splitType = splitArr[3].split('/');
+
+            if(splitType.includes(parkingType)){
+                locationArr.push("" + splitArr[0] + ", " + splitArr[1] + ", " + splitArr[2] + "");
+            };
+        };
 
         if (position != null && mode != "DRIVING") {
             orig = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -75,8 +99,8 @@
         }
 
         if (courseLocation && mode) {
-            for (var i = 0; i < lotLocations.length; i++) {
-                let selectValue = lotLocations[i].value;
+            for (var i = 0; i < locationArr.length; i++) {
+                let selectValue = locationArr[i];
                  if (mode == "DRIVING") {
                     orig = {
                         query: selectValue
@@ -188,7 +212,7 @@
 
         // Information window for parking icons
         for(let i = 0; i < markers.length; i++){
-            var content = "Name: " +markers[i].title +'<br>'+"Type: "+parkingData[i][2]+'<br>'+"Capacity: "+parkingData[i][5]+"%";
+            var content = "Name: " +markers[i].title +'<br>'+"Type: "+parkingData[i][2]+'<br>'+"Availability: "+parkingData[i][5]+"%";
             infowindowClick(markers[i], content);
         }
         function infowindowClick(marker, content){

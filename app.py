@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import datetime
-from datetime import datetime
+import threading
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from flask import Flask, render_template, request, make_response, redirect, url_for, session
@@ -12,7 +12,7 @@ from urllib.parse import parse_qs
 app = Flask(__name__)
 app.secret_key = 'uCraR5MZB/AvVo3Q24cBM/fZo5Kv/hV2HW9y0b3puClB25h0lbjBP6vYsHzz1hVY'
 HOST, PORT = 'localhost', 8080
-global userId, profile, buildings, favorites, classes, alerts, db, parking_decks, bus_locations, capacities
+global userId, profile, buildings, favorites, classes, alerts, db, parking_decks, bus_locations, capacities, scraper
 userId = None
 profile = None
 favorites = None
@@ -21,8 +21,9 @@ alerts = None
 capacities = None
 db = Database()
 buildings = db.get_all_buildings()
-parking_decks = db.get_all_parking_decks()
+parking_decks = None 
 bus_locations = db.get_all_bus_locations()
+scraper = None
 
 @app.route('/')
 def index_page():
@@ -75,6 +76,9 @@ def profile_page():
 def home_page():
     global userId, profile
     if isValidSession(userId):
+        cap_thread = threading.Thread(target=set_update_capacities)
+        cap_thread.start()
+        print(capacities)
         if profile == None:
             print("Retrieving user profile")
             # profile = db.get_profile_by_id(userId)
@@ -83,7 +87,7 @@ def home_page():
     
 @app.route('/home', methods=['POST'])
 def home_with_credentials_page():
-    global userId, profile, capacities
+    global userId, profile, capacities, parking_decks
     
     try:
         token = request.form['g_csrf_token']
@@ -110,32 +114,10 @@ def home_with_credentials_page():
 
         home_page = make_response(redirect(url_for('home_page')))
         home_page.set_cookie('g_csrf_token', token)
+        set_update_capacities()
         
-        # Get the current time
-        curr_time = datetime.now()
-        mil_time = int(curr_time.strftime('%H'))
-        day = curr_time.strftime('%a') #ex. Mon04PM
-        # Keeps fridays capacities to not break app
-        if(day == 'Sat' or 'Sun'):
-            day = 'Fri'
-        # Sets the formatted time based on database times
-        if(mil_time >= 1 and mil_time < 12):
-            formatted_time = "" + day + "10AM"
-        elif(mil_time >= 12 and mil_time < 14):
-            formatted_time = "" + day + "12PM"
-        elif(mil_time >= 14 and mil_time < 16):
-            formatted_time = "" + day + "02PM"
-        elif(mil_time >= 16 and mil_time < 18):
-            formatted_time = "" + day + "04PM"
-        else:
-            formatted_time = "" + day + "06PM" 
-        
-        # Gets capacity for current time and day
-        capacities = db.get_all_capacities(column=formatted_time)
-        # Changes cpacity values in database based on time and day
-        db.change_capacities(capacities)
-
         return home_page
+    
     except ValueError:
         return redirect(url_for('login_page'))
     
@@ -276,9 +258,66 @@ def isValidSession(user_id):
         return True
     return False
 
+def set_update_capacities():
+    global userId, profile, capacities, parking_decks, scraper
+    
+    # Get the current time
+    curr_time = datetime.datetime.now()
+    mil_time = int(curr_time.strftime('%H'))
+    day = curr_time.strftime('%a') #ex. Mon04PM
+    # Keeps fridays capacities to not break app
 
+    if day in ['Sat', 'Sun']:
+        day = 'Fri'
 
+    # Sets the formatted time based on database times
+    if(mil_time >= 1 and mil_time < 12):
+        formatted_time = "" + day + "10AM"
+    elif(mil_time >= 12 and mil_time < 14):
+        formatted_time = "" + day + "12PM"
+    elif(mil_time >= 14 and mil_time < 16):
+        formatted_time = "" + day + "02PM"
+    elif(mil_time >= 16 and mil_time < 18):
+        formatted_time = "" + day + "04PM"
+    else:
+        formatted_time = "" + day + "06PM" 
 
+    scraper_vals = []
+    if scraper != None:
+        # Format scraper results into usuable data
+        scraper[0]['name'] = 'Cone Deck 1'
+        scraper[1]['name'] = 'Cone Deck 2'
+        scraper[7]['name'] = 'Union Deck'
+        if len(scraper) == 10:
+            scraper.pop(8)
+
+        # Grab the correct values from scraper 
+        for val in scraper:
+            vals = (val['name'], val['percent_number'])
+            scraper_vals.append(vals)
+            
+    # Gets capacity for current time and day
+    capacities_lots = db.get_all_capacities(column=formatted_time)
+    capacities = scraper_vals + capacities_lots
+
+    # Changes cpacity values in database based on time and day
+    db.change_capacities(capacities)
+    parking_decks = db.get_all_parking_decks()
+    
+    # Update favorites for user
+    favorites = db.get_all_favorites_by_user(userId)
+    if favorites != None:
+        for fav in favorites:
+            temp_cap = (db.get_specific_parking_deck(fav[1]))[0][0]
+            db.update_favorites(userId, fav[1], temp_cap)
+
+def run_scraper():
+    global scraper
+    scraper = get_parking_availability()
+    
 if __name__ == '__main__':
     print('starting app...')
+    scraper_thread = threading.Thread(target=run_scraper)
+    scraper_thread.start()
     app.run(ssl_context='adhoc', debug=True, host=HOST, port=PORT)
+    

@@ -15,6 +15,11 @@ class Database:
         self.cursor.execute(
             "INSERT INTO favorites (fprofileID, parkingName, capacity) VALUES (%s, %s, %s)", (student_id, parking_name, capacity))
         self.connection.commit()
+        
+    def update_favorites(self, student_id: str, parking_name: str, capacity: int) -> None:
+        self.cursor.execute(
+            "UPDATE favorites SET capacity = %s WHERE fprofileID = %s AND parkingName= %s", (capacity, student_id, parking_name))
+        self.connection.commit()
 
     def insert_new_class(self, student_id: str, course_name: str, building_name: str) -> None:
         self.cursor.execute(
@@ -23,6 +28,10 @@ class Database:
 
     def get_all_parking_decks(self):
         self.cursor.execute("SELECT * FROM parkingLocations")
+        return self.cursor.fetchall()
+    
+    def get_specific_parking_deck(self, parking_name: str):
+        self.cursor.execute("SELECT capacity FROM parkingLocations WHERE shortName = %s", (parking_name,))
         return self.cursor.fetchall()
     
     def get_all_bus_locations(self):
@@ -86,9 +95,9 @@ class Database:
         self.cursor.execute("SELECT location, "+ column +" FROM capacity")
         return self.cursor.fetchall()
     
-    def change_capacities(self, capacities):
+    def change_capacities(self, capacities) -> None:
         for cap in capacities:
             self.cursor.execute("UPDATE parkingLocations SET capacity = %s WHERE shortName = %s", (cap[1], cap[0]))
         self.connection.commit()
-        return self.cursor.fetchall() 
+        
     

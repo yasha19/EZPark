@@ -2,6 +2,7 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 
 def get_parking_availability():
     print('parking availability')
@@ -9,7 +10,8 @@ def get_parking_availability():
     chrome_options = Options()
     chrome_options.add_argument("--headless")
 
-    driver = webdriver.Chrome("/chromedriver", options=chrome_options)
+    path = ChromeDriverManager().install()
+    driver = webdriver.Chrome(executable_path=path, options=chrome_options)
     url = "https://parkingavailability.charlotte.edu/"
     
     driver.get(url)

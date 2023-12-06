@@ -16,7 +16,7 @@
     <ul id="favorites-list">
         {% for location in favData %}
             <li class="favorites-list">
-                Location: {{ location[1] }}, Capacity: {{ location[2] }}% <i class="fa-solid fa-trash"  onclick='var location = "{{ location[1] }}";var capacity="{{ location[2] }}";removeFavorite(location,capacity);'></i>
+                Location: {{ location[1] }}, Avaliability: {{ location[2] }}% <i class="fa-solid fa-trash"  onclick='var location = "{{ location[1] }}";var capacity="{{ location[2] }}";removeFavorite(location,capacity);'></i>
             </li>
         {% endfor %}
     </ul>
