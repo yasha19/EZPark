@@ -11,8 +11,6 @@ from python.database.db import Database
 from python.web.parking import get_parking_availability
 from urllib.parse import parse_qs
 
-
-
 app = Flask(__name__)
 app.secret_key = 'uCraR5MZB/AvVo3Q24cBM/fZo5Kv/hV2HW9y0b3puClB25h0lbjBP6vYsHzz1hVY'
 HOST, PORT = 'localhost', 8080
@@ -282,14 +280,6 @@ def isValidSession(user_id):
     return False
 
 
-
-
-
-
 if __name__ == '__main__':
     print('starting app...')
     app.run(ssl_context='adhoc', debug=True, host=HOST, port=PORT)
-
-
-
-            
