@@ -242,6 +242,11 @@ input, select {
     height: 2rem;
     font-size: 20px;
 }
+.route-selection-container .parking-type-container {
+    float: right;
+    margin-right: 32%;
+    margin-top: 2rem;
+}
 
 #hidden-lot-select {
     visibility: hidden;

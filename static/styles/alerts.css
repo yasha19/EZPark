@@ -1,0 +1,55 @@
+.alerts-container {
+    width: 75%;
+    margin: auto;
+    background-color: #1C732F;
+    border-radius: 50px;
+    padding: 20px; 
+    margin-bottom: 50px;
+    margin-top: 50px;
+    
+}
+
+.alerts-header {
+    margin-top: 20px;
+    color: #C9E03C; 
+    margin-bottom: 50px;
+    text-align: right;
+    width: 75%;
+    margin: 0 auto;
+}
+
+#alerts-list {
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-bottom: 20px;
+    margin-top: 30px;
+    width: 50%;
+    margin: auto;
+}
+
+#alerts-list th {
+    color: rgb(255, 255, 255);
+    padding: 10px;
+    text-align: left;
+}
+.capacity-header{
+    margin-right: auto;
+    
+}
+
+.alerts-list {
+    color: white;
+    padding: 15px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.alerts-list td {
+    padding: 10px;
+    text-align:left;
+}
+
+
+
+
