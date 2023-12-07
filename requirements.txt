@@ -12,3 +12,4 @@ google-auth-httplib2
 google-auth-oauthlib
 selenium==4.6.0
 beautifulsoup4==4.12.2
+webdriver_manager==4.0.1
