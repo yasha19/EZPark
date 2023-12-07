@@ -13,7 +13,7 @@
     margin-top: 20px;
     color: #C9E03C; 
     margin-bottom: 50px;
-    text-align: right;
+    text-align: center;
     width: 75%;
     margin: 0 auto;
 }
@@ -23,7 +23,7 @@
     padding-right: 20px;
     margin-bottom: 20px;
     margin-top: 30px;
-    width: 50%;
+    width: 40%;
     margin: auto;
 }
 
@@ -39,7 +39,7 @@
 
 .alerts-list {
     color: white;
-    padding: 15px 0;
+    padding: 5px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
