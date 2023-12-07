@@ -100,4 +100,6 @@ class Database:
             self.cursor.execute("UPDATE parkingLocations SET capacity = %s WHERE shortName = %s", (cap[1], cap[0]))
         self.connection.commit()
         
-    
+        def get_capcities(self):
+        self.cursor.execute("SELECT * FROM parkingLocations")
+        return self.cursor.fetchall()

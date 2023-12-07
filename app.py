@@ -231,6 +231,7 @@ def alerts_page():
     if isValidSession(userId):
         now = datetime.datetime.now()
         # alerts = db.get_alerts_by_date(now)
+        alerts = db.get_capcities()
 
         return render_template('alerts.html', alertData=alerts, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page')) 
