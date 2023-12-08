@@ -94,3 +94,7 @@ class Database:
     def get_capcities(self):
         self.cursor.execute("SELECT * FROM parkingLocations")
         return self.cursor.fetchall()
+    
+    def insert_feedback(self, email, feedback, time):
+        self.cursor.execute("INSERT INTO feedback (email, feedback, time) VALUES (%s, %s, %s)", (email, feedback, time))
+        self.connection.commit()

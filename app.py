@@ -298,90 +298,31 @@ def alerts_page():
         return render_template('alerts.html', alertData=alerts, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
-
-# @app.route('/feedback', methods=['GET','POST'])
-# def feedback_page():
-#     global userId, feedback, profile
-#     if isValidSession(userId):
-#         if request.method == 'GET':
-#             return render_template('feedback.html', profileData=profile, backDisplay=True, aboutDisplay=False)
-#         else:
-#             data = request.data.decode('utf-8')
-#             data = parse_qs(data)
-#             feedback = data['feedback']
-#             profile = db.get_profile_by_id(userId, feedback[0])
-#             return render_template('feedback.html', profileData=profile, backDisplay=True, aboutDisplay=False)
-#     return redirect(url_for('feedback_page'))
-
-
-def send_feedback_email(sender_email, receiver_email, subject, message_text):
-    creds = None
-
-
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json')
-
-
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-
-
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
-
-
-    service = build('gmail', 'v1', credentials=creds)
-
-
-    message = create_message(sender_email, receiver_email, subject, message_text)
-    sent_message = service.users().messages().send(userId='me', body=message).execute()
-    print('Message Id: %s' % sent_message['id'])
-
-
-def create_message(sender_email, receiver_email, subject, message_text):
-    message = MIMEText(message_text)
-    message['to'] = receiver_email
-    message['from'] = sender_email
-    message['subject'] = subject
-    return {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()}
-
-
-@app.route('/feedback', methods=['GET', 'POST'])
+@app.route('/feedback', methods=['GET'])
 def feedback_page():
-    global userId
-
-
+    global userId, profile
     if isValidSession(userId):
-        if request.method == 'GET':
-            return render_template('feedback.html', backDisplay=True, aboutDisplay=False)
-        else:
-            sender_email = 'jbusitu@uncc.edu'  # will have to Change this to the email from which I'll send feedback
-            receiver_email = 'jbusitu@uncc.edu'  # will have to Change this to an email where feedback will be received
-            subject = 'Feedback from EZ Park App'
-            feedback_message = request.form.get('feedback', '')
-
-
-            send_feedback_email(sender_email, receiver_email, subject, feedback_message)
-
-
-            return render_template('feedback.html', backDisplay=True, aboutDisplay=False)
+        return render_template('feedback.html', profileData=profile, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
-
-
+@app.route('/feedback', methods=['POST'])
+def send_feedback():
+    global userId, profile
+    if isValidSession(userId):
+        data = request.data.decode('utf-8')
+        data = parse_qs(data)
+        email=data["email"]
+        feedback=data["feedback"]
+        time=data["time"]
+        db.insert_feedback(email[0], feedback[0], time[0])
+        return render_template('feedback.html', profileData=profile, backDisplay=True, aboutDisplay=False)
+    return redirect(url_for('login_page'))
 
 def isValidSession(user_id):
     if (user_id != None) and ('user_id' in session) and (session['user_id'] == userId):
         print("User validated")
         return True
     return False
-
-
-
 
 if __name__ == '__main__':
     print('starting app...')

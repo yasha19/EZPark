@@ -13,10 +13,8 @@
   </h1>
 </div>
 <div class="feedback-container">
-  <form id="feedbackForm" method="POST">
     <textarea id="feedback" name="feedback" rows="8" cols="50" placeholder="How can we help you?"></textarea><br><br>
-    <input type="button" value="Submit" onclick="submitFeedback()">
-  </form>
+    <button onclick="submitFeedback()">Submit</button>
 </div>
 
 
@@ -29,18 +27,21 @@
 
 
   function submitFeedback() {
-    var feedback = document.getElementById('feedback').value;
 
-
+    var feedback = document.getElementById("feedback").value;
+    console.log({ "feedback": feedback, "email": profileData[4], "time": Date.now() })
     $.ajax({
       type: 'POST', //sending the post
       url: '/feedback',
-      data: { "feedback": feedback },
+      data: { "feedback": feedback, "email": profileData[4], "time": Date.now() },
       contentType: 'application/json;charset=UTF-8',
       dataType: 'json',
       success: function (data) {
         console.log('Feedback submitted successfully!' + data);
         window.location.href = '/feedback'; // Redirect to feedback after submission
+      },
+      complete: function () {
+        document.getElementById("feedback").value="";
       },
       error: function () {
         console.log('Failed to submit feedback. Please try again.');
