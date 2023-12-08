@@ -8,20 +8,21 @@
         <table class="table table-striped" id="alerts-list">
             <thead>
                 <tr>
-                    <th>Name:</th>
-                    <th class = "capacity-header">Capacity:</th>
+                    <th class="name-header">Name:</th>
+                    <th class="capacity-header">Capacity:</th>
                 </tr>
             </thead>
             <tbody>
                 {% for location in alertData %}
                 <tr class="alerts-list">
-                    <td>{{ location[1] }}</td>
-                    <td style="color: {% if location[6] < 11 %}red{% else %}white{% endif %};"> {{ location[6] }}%</td>
+                    <td class="name-body">{{ location[1] }}</td>
+                    <td class="capacity-body" style="color: {% if location[6] < 11 %}red{% else %}white{% endif %};"> {{ location[6] }}%</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+    
 
 
 

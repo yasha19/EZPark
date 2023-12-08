@@ -1,55 +1,52 @@
 .alerts-container {
-    width: 75%;
-    margin: auto;
+    width: 80%;
+    margin: 50px auto;
     background-color: #1C732F;
-    border-radius: 50px;
-    padding: 20px; 
-    margin-bottom: 50px;
-    margin-top: 50px;
-    
+    border-radius: 20px;
+    padding: 20px;
 }
 
 .alerts-header {
-    margin-top: 20px;
-    color: #C9E03C; 
-    margin-bottom: 50px;
+    color: #C9E03C;
+    margin-bottom: 30px;
     text-align: center;
-    width: 75%;
-    margin: 0 auto;
 }
 
 #alerts-list {
-    padding-left: 20px;
-    padding-right: 20px;
+    width: 100%;
     margin-bottom: 20px;
-    margin-top: 30px;
-    width: 40%;
-    margin: auto;
+    border-collapse: collapse;
 }
 
 #alerts-list th {
-    color: rgb(255, 255, 255);
+    color: white;
     padding: 10px;
+    text-align: center;
+    border-bottom: 2px solid #C9E03C;
+}
+
+#alerts-list .name-header {
+    width: 50%;
+}
+
+#alerts-list .capacity-header {
+    width: 50%;
+    text-align: center;
+}
+
+#alerts-list tbody tr {
+    border-bottom: 1px solid #C9E03C;
+}
+
+#alerts-list td {
+    padding: 10px;
+    color: white;
     text-align: left;
 }
-.capacity-header{
-    margin-right: auto;
-    
+
+#alerts-list .capacity-body {
+    text-align: center;
 }
-
-.alerts-list {
-    color: white;
-    padding: 5px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+#alerts-list .name-body {
+    text-align: center;
 }
-
-.alerts-list td {
-    padding: 10px;
-    text-align:left;
-}
-
-
-
-
