@@ -16,7 +16,7 @@
                 {% for location in alertData %}
                 <tr class="alerts-list">
                     <td>{{ location[1] }}</td>
-                    <td>{{ location[6] }}%</td>
+                    <td style="color: {% if location[6] < 11 %}red{% else %}white{% endif %};"> {{ location[6] }}%</td>
                 </tr>
                 {% endfor %}
             </tbody>
