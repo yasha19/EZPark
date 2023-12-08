@@ -82,14 +82,12 @@ class Database:
         self.cursor.execute(
             "DELETE FROM classes WHERE courseName = %s AND buildingName = %s AND cProfileID = %s", (course_name, building_name, student_id))
         self.connection.commit()
-        return self.cursor.fetchall()
     
     def delete_favorite(self, student_id: str, parking_name: str, capacity: int) -> None:
         print(student_id)
         self.cursor.execute(
             "DELETE FROM favorites WHERE parkingName = %s AND capacity = %s AND fprofileID = %s", (parking_name, capacity, student_id))
         self.connection.commit()
-        return self.cursor.fetchall()
 
     def get_all_capacities(self, column):
         self.cursor.execute("SELECT location, "+ column +" FROM capacity")

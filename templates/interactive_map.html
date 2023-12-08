@@ -38,10 +38,16 @@
         </select>
     </div>
 
+    <div class="go-btn-container">
+        <button class="go-btn">Go</button>
+    </div>
+    
     <div class="calculation-container">
+        <p>Parking Deck: <span id="best-location"></span></p>
         <p>Best Route: <span id="best-route"></span></p>
         <p>Duration: <span id="duration"></span></p>
     </div>
+
     <select id="hidden-lot-select">
         {% for lot in parkingData %}
             {% if lot[5] > 10 %}
@@ -88,7 +94,7 @@
             var splitType = splitArr[3].split('/');
 
             if(splitType.includes(parkingType)){
-                locationArr.push("" + splitArr[0] + ", " + splitArr[1] + ", " + splitArr[2] + "");
+                locationArr.push(splitArr[0] + ", " + splitArr[1] + ", " + splitArr[2]);
             };
         };
 
