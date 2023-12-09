@@ -57,28 +57,12 @@ def about_page():
         return render_template('about.html', backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
-@app.route('/profile', methods=['GET', 'POST'])
-def profile_page():
-    global userId, profile
-    if isValidSession(userId):
-        if request.method == 'GET':
-            return render_template('profile.html', backDisplay=True, aboutDisplay=False)
-        else:
-            print("saving user settings")
-
-            # profile.rec = request.form['rec']
-            # profile.comType = request.form['comType']
-            # db.update_profile(profile)
-            
-    return redirect(url_for('login_page'))
-
 @app.route('/home')
 def home_page():
     global userId, profile
     if isValidSession(userId):
         cap_thread = threading.Thread(target=set_update_capacities)
         cap_thread.start()
-        print(capacities)
         if profile == None:
             print("Retrieving user profile")
             # profile = db.get_profile_by_id(userId)
@@ -139,8 +123,6 @@ def map_page():
             lotAddress = f'{lot[2]}, {lot[3]}, {lot[4]} {lot[5]}'
             newLot = (lot[1],) + (lotAddress,) + (lot[7],) + (lot[8],) + (lot[9],) + (lot[6],)
             lots.append(newLot)
-        print(lots)
-
         return render_template('interactive_map.html', classData=courses, parkingData=lots, busData=bus_locations, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
     
