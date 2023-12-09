@@ -19,7 +19,7 @@
 
     <div class="travel-mode-container">
         <label for="travel-mode-selector">Method of travel</label>
-        <select id="travel-mode-selector">
+        <select id="travel-mode-selector" onchange="showParkingDeck()">
             <option class="mode-option" value="" value="" selected></option>
             <option class="mode-option" value="DRIVING">Driving</option>
             <option class="mode-option" value="WALKING">Walking</option>
@@ -31,6 +31,7 @@
     <div class="parking-type-container">
         <label for="parking-type-selector">Parking Type:</label>
         <select id="parking-type-selector">
+            <option class="mode-option" value="" value="" selected></option>
             <option class="type-option" value="C">Commuter</option>
             <option class="type-option" value="FS">Faculty/Staff</option>
             <option class="type-option" value="R">Resident</option>
@@ -38,10 +39,16 @@
         </select>
     </div>
 
+    <div class="go-btn-container">
+        <button id="go-btn" class="go-btn">Go</button>
+    </div>
+
     <div class="calculation-container">
+        <p id="parking-deck-best-route">Parking Deck: <span id="best-location"></span></p>
         <p>Best Route: <span id="best-route"></span></p>
         <p>Duration: <span id="duration"></span></p>
     </div>
+
     <select id="hidden-lot-select">
         {% for lot in parkingData %}
             {% if lot[5] > 10 %}
@@ -54,26 +61,23 @@
 <div id="google-map-container">
 </div>
 
-<!-- <div class="parking-container">
-    <ul class="parking-decks-container">
-        {% for deck in deckData %}
-        <li class="parking-deck"><span class="name">{{ deck.name }}</span> 
-            {% if deck.percent_number is gt 20  %}
-            <span class="percent regular">{{ deck.percent }}</span>
-            {% else %}
-            <span class="percent alert">{{ deck.percent }}</span>
-            {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
-</div> -->
-
-
 <script>    
 
     let routes = [];
     let map;
+    let parkingDeck = document.getElementById("parking-deck-best-route");
+    parkingDeck.style.visibility = "hidden";
+
     const lotLocations = document.getElementById("hidden-lot-select").options;
+
+    function showParkingDeck() {
+        let mode = document.getElementById("travel-mode-selector").value;
+        if (mode == "DRIVING") {
+            parkingDeck.style.visibility = "visible";
+        } else {
+            parkingDeck.style.visibility = "hidden";
+        }
+    }
 
     function calculateRoute(directionsService, directionsRenderer, position) {
         var orig;
@@ -88,7 +92,7 @@
             var splitType = splitArr[3].split('/');
 
             if(splitType.includes(parkingType)){
-                locationArr.push("" + splitArr[0] + ", " + splitArr[1] + ", " + splitArr[2] + "");
+                locationArr.push(splitArr[0] + ", " + splitArr[1] + ", " + splitArr[2]);
             };
         };
 
@@ -144,6 +148,17 @@
                 });
                 directionsRenderer.setDirections(shortestRoute.routeData);
                 let legData = shortestRoute.routeData.routes[0].legs[0];
+
+                if (mode == "DRIVING") {
+                    console.log("Shortest route is: " + shortestRoute.initial_value.origin.query);
+                    for(let j = 0; j < lotLocations.length; j++){
+                        if(lotLocations[j].value.includes(shortestRoute.initial_value.origin.query)){
+                            document.getElementById("best-location").innerHTML = lotLocations[j].innerHTML;
+                            break;
+                        };
+                    };
+                }
+                
                 document.getElementById("best-route").innerHTML = legData.distance.text;
                 document.getElementById("duration").innerHTML = legData.duration.text;
             } 
@@ -231,8 +246,7 @@
             calculateRoute(directionsService, directionsRenderer, position);
         }
 
-        document.getElementById("class-selector").addEventListener("change", onChangeHandler);
-        document.getElementById("travel-mode-selector").addEventListener("change", onChangeHandler);
+        document.getElementById("go-btn").addEventListener("click", onChangeHandler);
 
         directionsRenderer.setMap(map);
     }

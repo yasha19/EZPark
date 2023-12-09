@@ -50,7 +50,7 @@ class Database:
     def remove_favorite(self, student_id: str, location):
         print(location)
         self.cursor.execute(
-            "DELETE FROM favprites WHERE fprofileID = %s  AND parklocation", (student_id, location))
+            "DELETE FROM favorites WHERE fprofileID = %s  AND parklocation", (student_id, location))
         self.connection.commit()
         return self.cursor.fetchall()
 
@@ -73,14 +73,12 @@ class Database:
         self.cursor.execute(
             "DELETE FROM classes WHERE courseName = %s AND buildingName = %s AND cProfileID = %s", (course_name, building_name, student_id))
         self.connection.commit()
-        return self.cursor.fetchall()
     
     def delete_favorite(self, student_id: str, parking_name: str, capacity: int) -> None:
         print(student_id)
         self.cursor.execute(
             "DELETE FROM favorites WHERE parkingName = %s AND capacity = %s AND fprofileID = %s", (parking_name, capacity, student_id))
         self.connection.commit()
-        return self.cursor.fetchall()
 
     def get_all_capacities(self, column):
         self.cursor.execute("SELECT location, "+ column +" FROM capacity")
@@ -97,4 +95,8 @@ class Database:
     
     def insert_feedback(self, email, feedback, time):
         self.cursor.execute("INSERT INTO feedback (email, feedback, time) VALUES (%s, %s, %s)", (email, feedback, time))
+<<<<<<< HEAD
         self.connection.commit()
+=======
+        self.connection.commit()
+>>>>>>> 6a85deb1f9e2d377f160d18e8b73d26060ea191b

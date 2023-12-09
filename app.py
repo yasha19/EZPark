@@ -70,6 +70,7 @@ def about_page():
         return render_template('about.html', backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
+<<<<<<< HEAD
 @app.route('/profile', methods=['GET', 'POST'])
 def profile_page():
     global userId, profile
@@ -88,10 +89,17 @@ def profile_page():
            
     return redirect(url_for('login_page'))
 
+=======
+>>>>>>> 6a85deb1f9e2d377f160d18e8b73d26060ea191b
 @app.route('/home')
 def home_page():
     global userId, profile
     if isValidSession(userId):
+<<<<<<< HEAD
+=======
+        cap_thread = threading.Thread(target=set_update_capacities)
+        cap_thread.start()
+>>>>>>> 6a85deb1f9e2d377f160d18e8b73d26060ea191b
         if profile == None:
             print("Retrieving user profile")
             # profile = db.get_profile_by_id(userId)
@@ -165,11 +173,14 @@ def map_page():
             lotAddress = f'{lot[2]}, {lot[3]}, {lot[4]} {lot[5]}'
             newLot = (lot[1],) + (lotAddress,) + (lot[7],)
             lots.append(newLot)
+<<<<<<< HEAD
         print(lots)
 
 
 
 
+=======
+>>>>>>> 6a85deb1f9e2d377f160d18e8b73d26060ea191b
         return render_template('interactive_map.html', classData=courses, parkingData=lots, busData=bus_locations, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
    
@@ -262,8 +273,13 @@ def alerts_page():
         # alerts = db.get_alerts_by_date(now)
 
         return render_template('alerts.html', alertData=alerts, backDisplay=True, aboutDisplay=False)
+<<<<<<< HEAD
     return redirect(url_for('login_page'))
 
+=======
+    return redirect(url_for('login_page')) 
+    
+>>>>>>> 6a85deb1f9e2d377f160d18e8b73d26060ea191b
 @app.route('/feedback', methods=['GET'])
 def feedback_page():
     global userId, profile
