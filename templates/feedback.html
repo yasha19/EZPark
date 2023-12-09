@@ -6,7 +6,6 @@
 
 {% include "header.html" %}
 
-
 <div class="feedback-header">
   <h1 class="header">
     Feedback
@@ -17,14 +16,11 @@
     <button onclick="submitFeedback()" id="submit-btn">Submit</button>
 </div>
 
-
 {% include "footer.html" %}
-
 
 <script>
   var profileData = {{ profileData | tojson | safe }};
   console.log(profileData[4]);
-
 
   function submitFeedback() {
 
@@ -49,11 +45,9 @@
     });
   }
 
-
   function goHome() {
     window.location.href = '/home';
   }
 </script>
-
 
 {% endblock %}

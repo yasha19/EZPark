@@ -1,16 +1,13 @@
 import datetime
 from datetime import datetime
 
-
 import os
 import base64
 from email.mime.text import MIMEText
 
-
 from google.oauth2 import id_token
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
-
 
 from google.auth.transport import requests
 from google.auth.transport.requests import Request
@@ -19,7 +16,6 @@ from flask import Flask, render_template, request, make_response, redirect, url_
 from python.database.db import Database
 from python.web.parking import get_parking_availability
 from urllib.parse import parse_qs
-
 
 app = Flask(__name__)
 app.secret_key = 'uCraR5MZB/AvVo3Q24cBM/fZo5Kv/hV2HW9y0b3puClB25h0lbjBP6vYsHzz1hVY'
@@ -41,9 +37,6 @@ bus_locations = db.get_all_bus_locations()
 client_id = '1031925357556-g9tr3am18n1vg8ce88svenjgj82onrvt.apps.googleusercontent.com',
 client_secret = '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',
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
-
-
-
 
 @app.route('/')
 def index_page():
@@ -77,9 +70,6 @@ def about_page():
         return render_template('about.html', backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
-
-
-
 @app.route('/profile', methods=['GET', 'POST'])
 def profile_page():
     global userId, profile
@@ -97,9 +87,6 @@ def profile_page():
             # db.update_profile(profile)
            
     return redirect(url_for('login_page'))
-
-
-
 
 @app.route('/home')
 def home_page():
@@ -207,18 +194,12 @@ def delete_classes():
         return render_template('classes.html', classData=classes, buildingData=buildings, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
-
-
-
 @app.route('/add-classes', methods=['GET'])
 def add_classes_home_page():
     global userId, buildings
     if isValidSession(userId):
         return render_template('add_classes.html', buildingData=buildings, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
-
-
-
 
 @app.route('/add-classes', methods=['POST'])
 def add_classes():
@@ -232,9 +213,6 @@ def add_classes():
         return render_template('add_classes.html', buildingData=buildings, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
-
-
-
 @app.route('/favorites', methods=['GET'])
 def favorites_home_page():
     global userId, favorites
@@ -242,9 +220,6 @@ def favorites_home_page():
         favorites = db.get_all_favorites_by_user(userId)
         return render_template('favorites.html', favData=favorites, parkingData=parking_decks, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
-
-
-
 
 @app.route('/favorites', methods=['DELETE'])
 def delete_favorites():
@@ -259,18 +234,12 @@ def delete_favorites():
         return render_template('favorites.html', favData=favorites, parkingData=parking_decks, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
 
-
-
-
 @app.route('/add-favorites', methods=['GET'])
 def add_favorites_home_page():
     global userId, parking_decks
     if isValidSession(userId):
         return render_template('add_favorites.html', parkingData=parking_decks, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
-
-
-
 
 @app.route('/add-favorites', methods=['POST'])
 def add_favorites():
@@ -291,9 +260,6 @@ def alerts_page():
     if isValidSession(userId):
         now = datetime.datetime.now()
         # alerts = db.get_alerts_by_date(now)
-
-
-
 
         return render_template('alerts.html', alertData=alerts, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page'))
