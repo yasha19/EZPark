@@ -218,22 +218,25 @@ def alerts_page():
         return render_template('alerts.html', alertData=alerts, backDisplay=True, aboutDisplay=False)
     return redirect(url_for('login_page')) 
     
-@app.route('/feedback', methods=['GET','POST'])
+@app.route('/feedback', methods=['GET'])
 def feedback_page():
-    print("feedback_page")
-    global userId
+    global userId, profile
     if isValidSession(userId):
-        if request.method == 'GET':
-            return render_template('feedback.html', backDisplay=True, aboutDisplay=False)
-        else:
-            # Put the code for sending a feedback to email here
+        return render_template('feedback.html', profileData=profile, backDisplay=True, aboutDisplay=False)
+    return redirect(url_for('login_page'))
 
-            # user = request.form['userId']
-            # feedback = request.form['feedback']
-            # send_feedback(user, feedback)
-
-            return render_template('feedback.html', backDisplay=True, aboutDisplay=False)
-    return redirect(url_for('login_page'))    
+@app.route('/feedback', methods=['POST'])
+def send_feedback():
+    global userId, profile
+    if isValidSession(userId):
+        data = request.data.decode('utf-8')
+        data = parse_qs(data)
+        email=data["email"]
+        feedback=data["feedback"]
+        time=data["time"]
+        db.insert_feedback(email[0], feedback[0], time[0])
+        return render_template('feedback.html', profileData=profile, backDisplay=True, aboutDisplay=False)
+    return redirect(url_for('login_page'))
 
 def isValidSession(user_id):
     if (user_id != None) and ('user_id' in session) and (session['user_id'] == userId):

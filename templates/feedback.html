@@ -1,21 +1,59 @@
 {% extends "layout.html" %}
 
+
 {% block content %}
+
 
 {% include "header.html" %}
 
-<form action="/submit_feedback" method="post">
-    <label for="feedback"> Feedback:</label><br>
-    <textarea id="feedback" name="feedback" rows="10" cols="30"></textarea><br>
-    <input type="submit" value="Submit Feedback">
-</form>
+
+<div class="feedback-header">
+  <h1 class="header">
+    Feedback
+  </h1>
+</div>
+<div class="feedback-container">
+    <textarea id="feedback" name="feedback" rows="8" cols="50" placeholder="How can we help you?"></textarea><br><br>
+    <button onclick="submitFeedback()" id="submit-btn">Submit</button>
+</div>
+
 
 {% include "footer.html" %}
 
+
 <script>
-    function goHome() {
-        window.location.href="/home";
+var profileData = {{ profileData | tojson | safe }};
+console.log(profileData[4]);
+
+
+function submitFeedback() {
+
+var feedback = document.getElementById("feedback").value;
+console.log({ "feedback": feedback, "email": profileData[4], "time": Date.now() })
+$.ajax({
+    type: 'POST', //sending the post
+    url: '/feedback',
+    data: { "feedback": feedback, "email": profileData[4], "time": new Date(Date.now()).toISOString() },
+    contentType: 'application/json;charset=UTF-8',
+    dataType: 'json',
+    success: function (data) {
+    console.log('Feedback submitted successfully!' + data);
+    window.location.href = '/feedback'; // Redirect to feedback after submission
+    },
+    complete: function () {
+    document.getElementById("feedback").value="";
+    },
+    error: function () {
+    console.log('Failed to submit feedback. Please try again.');
     }
+    });
+}
+
+
+  function goHome() {
+    window.location.href = '/home';
+  }
 </script>
+
 
 {% endblock %}

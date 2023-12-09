@@ -324,3 +324,40 @@ input, select {
     font-size: 20px;
     cursor: pointer;
 }
+
+.feedback-header {
+    margin: 10px;
+}
+  
+.header {
+    color: #C9E03C;
+    text-align: center;
+    margin: 0;
+}
+  
+.feedback-container {
+    text-align: center;
+}
+  
+#feedback {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+}
+  
+#submit-btn {
+    padding: 10px 20px;
+    background-color: #C9E03C;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+  
+  /* Button hover effect */
+#submit-btn:hover {
+    background-color: #505a0f;
+}
